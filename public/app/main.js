@@ -1,5 +1,6 @@
 import { fetchDay, fetchDays } from "./api.js";
 import { h } from "./dom.js";
+import { parseRoute } from "./router.js";
 import { addMonth } from "./format.js";
 import { renderCalendar } from "./views/calendar.js";
 import { header } from "./views/chrome.js";
@@ -84,23 +85,12 @@ async function showSetup(message = "") {
   );
 }
 
-async function showHome() {
-  const { today, days } = await fetchDays();
-  if (days.some((d) => d.date === today)) {
-    location.replace(`#/day/${today}`);
-  } else {
-    location.replace("#/calendar");
-  }
-}
-
 async function route() {
-  const hash = location.hash;
+  const target = parseRoute(location.hash);
   try {
-    const dayMatch = /^#\/day\/(\d{4}-\d{2}-\d{2})$/.exec(hash);
-    if (dayMatch) await showDay(dayMatch[1]);
-    else if (hash === "#/calendar") await showCalendar();
-    else if (hash === "#/setup") await showSetup();
-    else await showHome();
+    if (target.name === "day") await showDay(target.date);
+    else if (target.name === "setup") await showSetup();
+    else await showCalendar();
   } catch {
     renderOffline();
   }
