@@ -59,7 +59,7 @@ export function header({ back = false, tagline = null, settings = false } = {}) 
     h(
       "div",
       { class: "nav" },
-      h("span", { class: "brand" }, plumeIcon(), "Kleio"),
+      h("span", { class: "brand" }, "Kleio", plumeIcon()),
       settings ? h("a", { class: "settings-link", href: "#/setup", "aria-label": "Réglages" }, gearIcon()) : null,
     ),
     tagline ? h("p", { class: "tagline" }, tagline) : null,

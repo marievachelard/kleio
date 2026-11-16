@@ -46,13 +46,13 @@ body {
 .settings-link { position: absolute; right: -6px; top: 50%; transform: translateY(-40%); width: 36px; height: 36px; display: grid; place-items: center; color: var(--mut); border-radius: 50%; }
 .brand { display: inline-flex; align-items: center; gap: 7px; color: var(--key-text); font-weight: 600; font-size: 17px; }
 
-/* Plume « Respiration » à côté du nom : même couleur que le texte, mouvement léger. */
+/* Plume « Respiration » à droite du nom : même couleur que le texte, mouvement lent et visible. */
 .plume { width: 26px; height: 26px; flex: none; overflow: visible; color: inherit; }
 .plume path { fill: none; stroke: currentColor; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
 .plume__feather { transform-box: view-box; transform-origin: 40px 470px; animation: plume-souffle 1.8s ease-in-out infinite alternate; }
 @keyframes plume-souffle {
-  0%   { transform: rotate(-2.5deg) translate(-3px, 0); }
-  100% { transform: rotate(2.5deg) translate(3px, -6px); }
+  0%   { transform: rotate(-6deg) translate(-8px, 2px); }
+  100% { transform: rotate(6deg) translate(8px, -16px); }
 }
 @media (prefers-reduced-motion: reduce) { .plume__feather { animation: none; } }
 .tagline { margin: 2px 0 30px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
