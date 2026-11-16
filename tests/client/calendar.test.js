@@ -105,6 +105,15 @@ describe("renderCalendar", () => {
     expect(card.querySelector("p").textContent).toBe("37 pays signent à Londres.");
   });
 
+  test("le texte de la carte est un bloc repérable (« .pc »), pour pouvoir le faire glisser quand on change de jour", () => {
+    renderCalendar(root, baseState, handlers());
+    const pc = root.querySelector(".pickcard .pc");
+    expect(pc).not.toBeNull();
+    expect(pc.querySelector("h4").textContent).toBe("16 novembre 1945");
+    expect(pc.querySelector("p")).not.toBeNull();
+    expect(pc.querySelector(".go")).toBeNull();
+  });
+
   test("toute la carte ouvre le détail du jour sélectionné, pas seulement la flèche", () => {
     const h = handlers();
     renderCalendar(root, baseState, h);

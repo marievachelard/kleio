@@ -136,3 +136,14 @@ Dans l'interface, on parle toujours d'« activer les notifications » : jamais d
 - **Réglages sans « Statut »** (changement du 2026-11-16) : la section « Statut » (inscription, dernier envoi, fait du jour prêt) est retirée, elle n'apportait rien. L'écran garde l'installation, le bouton « Activer les notifications », le test, et l'alerte « Réactive les notifications » quand le téléphone a perdu son inscription.
 - **Retour** (changement du 2026-11-16) : le bouton « ‹ Calendrier » devient une petite flèche seule, sans le mot, à gauche de l'en-tête permanent, sur la même ligne que « Kleio » et l'icône de réglages. Elle apparaît sur les écrans de détail et de réglages, jamais sur le calendrier.
 - **Titres alignés** (changement du 2026-11-16) : le titre de chaque écran (« Novembre 2026 » sur le calendrier, la date complète sur le détail, « Réglages ») est exactement à la même hauteur, celle du calendrier servant de référence. La phrase d'accueil du calendrier a une hauteur fixe (52 px avec ses marges, variable CSS `--tagline-block`) et les autres écrans réservent la même hauteur au-dessus de leur titre.
+
+## Mouvements (choisis par Marie le 2026-11-16, à partir de la page d'idées)
+
+- **Feuille qui monte** : le détail d'un jour et les réglages se posent sur le calendrier, qui recule (échelle 0,94, opacité 0,5) et reste visible derrière. Ouverture en 520 ms. Même transition quand on arrive par une notification : le calendrier existe toujours sous la feuille.
+- **Retour en « descente douce »** : la feuille s'efface en descendant à peine (34 px, 300 ms) pendant que le calendrier reprend sa place (440 ms). Ce n'est jamais un balayage jusqu'en bas de l'écran. Même retour depuis les réglages et depuis le détail.
+- **Cartes en cascade** : à l'ouverture, les cartes arrivent l'une après l'autre (480 ms chacune, 70 ms d'écart, départ à 160 ms).
+- **Texte qui glisse** : en changeant de jour dans le calendrier, le texte de la carte sort et entre en glissant dans le sens du temps.
+- **Cartes qui s'enfoncent** : une carte appuyée se tasse à 97 % sous le doigt (carte du jour, cartes du détail).
+- **Rythme normal.** Tous les mouvements deviennent instantanés si le téléphone est réglé sur « Réduire les animations ».
+- Écartés par Marie : trait de plume sous la date, cercle qui rebondit, étoiles qui scintillent, glissement latéral, carte qui s'ouvre, fondu qui monte.
+- Les changements d'écran s'enchaînent : un retour touché pendant une animation attend la fin de celle-ci.

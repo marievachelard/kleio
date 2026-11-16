@@ -117,7 +117,7 @@ export function renderCalendar(root, state, handlers) {
           handlers.onOpen(selected);
         },
       },
-      h("div", null, h("h4", null, formatEventDate(d, m, item.eventYear)), h("p", null, item.short)),
+      h("div", { class: "pc" }, h("h4", null, formatEventDate(d, m, item.eventYear)), h("p", null, item.short)),
       h("span", { class: "go", "aria-hidden": "true" }, svg("0 0 12 12", [12, 12], "M2.5 9.5l7-7M3.5 2.5h6v6", 1.9)),
     );
   }
