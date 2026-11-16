@@ -10,6 +10,7 @@
   --key-soft: color-mix(in srgb, var(--key) 14%, var(--card));
   --on-key: #ffffff;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+  --tagline-block: 52px;
   color-scheme: light dark;
 }
 
@@ -56,12 +57,14 @@ body {
   100% { transform: rotate(6deg) translate(8px, -6px); }
 }
 @media (prefers-reduced-motion: reduce) { .plume__feather { animation: none; } }
-.tagline { margin: 2px 0 30px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
+/* Bloc de hauteur fixe (2 + 20 + 30 = 52 px) : les titres du détail et des réglages réservent la même hauteur,
+   pour que tous les titres d'écran soient à la même position que « Novembre » sur le calendrier. */
+.tagline { height: 20px; line-height: 20px; margin: 2px 0 30px; text-align: center; font-size: 14px; color: var(--mut); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .back-link { position: absolute; left: -15px; top: 50%; transform: translateY(-40%); width: 40px; height: 36px; display: grid; place-items: center; color: var(--key-text); border-radius: 50%; }
 .back-link[hidden] { display: none; }
 .pad { padding: 0; }
 .large { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 2px; line-height: 1.15; }
-h1.large { text-wrap: balance; }
+h1.large { text-wrap: balance; margin-top: var(--tagline-block); }
 .empty { color: var(--mut); margin-top: 24px; }
 
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 10px; }
