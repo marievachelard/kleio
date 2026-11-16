@@ -41,3 +41,10 @@ export interface Env {
   VAPID_PRIVATE_KEY: string;
   VAPID_SUBJECT: string;
 }
+
+/** Abonnement push tel que renvoyé par `PushSubscription.toJSON()` dans le navigateur. */
+export interface PushSubscriptionJSON {
+  endpoint?: string;
+  expirationTime?: number | null;
+  keys?: { auth: string; p256dh: string };
+}
