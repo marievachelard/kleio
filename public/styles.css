@@ -1,0 +1,42 @@
+/* Jetons de couleur de Kleio : style iOS natif, une seule couleur clé (#BA5A53). Clair et sombre suivent le téléphone. */
+:root {
+  --bg: #f2f2f7;
+  --card: #ffffff;
+  --fg: #1c1c1e;
+  --mut: #6c6c70;
+  --line: #e0e0e6;
+  --key: #ba5a53;
+  --key-text: #a94a43;
+  --key-soft: color-mix(in srgb, var(--key) 14%, var(--card));
+  --on-key: #ffffff;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --fg: #f5f5f7;
+    --mut: #98989f;
+    --line: #2c2c2e;
+    --key-text: #e08a83;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
