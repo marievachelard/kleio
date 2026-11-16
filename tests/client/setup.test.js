@@ -46,14 +46,16 @@ describe("renderSetup", () => {
     expect(buttons()).not.toContain("Envoyer une notification de test");
   });
 
-  test("affiche le statut du téléphone : notifications activées, dernier envoi, fait du jour prêt", () => {
+  test("il n'y a aucune section « Statut » (ni inscription, ni dernier envoi, ni fait du jour)", () => {
     renderSetup(root, state(), handlers());
+    const titles = [...root.querySelectorAll("h2")].map((h) => h.textContent);
+    expect(titles).not.toContain("Statut");
     const text = root.textContent;
-    expect(text).toContain("Notifications activées sur ce téléphone");
-    expect(text).toContain("Dernier envoi : 16 novembre");
-    expect(text).toContain("Fait du jour prêt");
+    expect(text).not.toContain("Dernier envoi");
+    expect(text).not.toContain("Fait du jour");
+    expect(text).not.toContain("Notifications activées sur ce téléphone");
+    expect(text).not.toContain("Aucun fait prêt");
   });
-
   test("téléphone qui avait activé puis disparu du serveur : message « Réactive les notifications »", () => {
     renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: true }), handlers());
     expect(root.querySelector(".alert").textContent).toContain("Réactive les notifications");
@@ -62,11 +64,6 @@ describe("renderSetup", () => {
   test("téléphone qui n'a jamais activé : pas d'alerte", () => {
     renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: false }), handlers());
     expect(root.querySelector(".alert")).toBeNull();
-  });
-
-  test("aucun fait prêt pour aujourd'hui est signalé", () => {
-    renderSetup(root, state({ status: { ...okStatus, todayReady: false } }), handlers());
-    expect(root.textContent).toContain("Aucun fait prêt pour aujourd'hui");
   });
 
   test("sans statut (hors ligne), la page reste utilisable", () => {

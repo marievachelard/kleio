@@ -1,5 +1,4 @@
 import { h } from "../dom.js";
-import { formatDayTitle } from "../format.js";
 import { header } from "./chrome.js";
 
 /**
@@ -39,17 +38,6 @@ export function renderSetup(root, state, handlers) {
       )
     : null;
 
-  const statusBlock = status
-    ? h(
-        "section",
-        { class: "group" },
-        h("h2", null, "Statut"),
-        h("p", null, status.subscribed ? "Notifications activées sur ce téléphone" : "Notifications non activées sur ce téléphone"),
-        h("p", null, status.lastSentDate ? `Dernier envoi : ${formatDayTitle(status.lastSentDate)}` : "Aucun envoi pour le moment"),
-        h("p", null, status.todayReady ? "Fait du jour prêt" : "Aucun fait prêt pour aujourd'hui"),
-      )
-    : null;
-
   root.replaceChildren(
     ...header({ back: true }).filter(Boolean),
     h(
@@ -62,7 +50,6 @@ export function renderSetup(root, state, handlers) {
       message ? h("p", { class: "msg", role: "status" }, message) : null,
       install,
       actions,
-      statusBlock,
     ),
   );
 }
