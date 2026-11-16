@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Plume">
+  <style>
+    .f { fill: none; stroke: #ba5a53; stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+    .feather {
+      transform-box: view-box;
+      transform-origin: 40px 470px;
+      animation: plume-souffle 1.8s ease-in-out infinite alternate;
+    }
+    @keyframes plume-souffle {
+      0%   { transform: rotate(-2.5deg) translate(-3px, 0); }
+      100% { transform: rotate(2.5deg) translate(3px, -6px); }
+    }
+    @media (prefers-reduced-motion: reduce) { .feather { animation: none; } }
+  </style>
+  <g class="feather">
+    <path class="f" d="M472 62 C420 30 280 30 200 90 L145 132 L132 150 L130 230 L102 180 C70 220 50 290 66 374 C110 384 160 384 192 375 L152 334 L240 327 L332 262 L268 236 C310 229 345 226 362 210 L438 140 C460 110 470 85 472 62 Z"/>
+    <path class="f" d="M382 122 C410 124 435 118 455 108"/>
+    <path class="f" d="M245 82 C238 100 236 115 240 128"/>
+    <path class="f" d="M308 132 C230 190 120 280 75 365 C55 400 42 440 40 470"/>
+  </g>
+</svg>

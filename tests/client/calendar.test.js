@@ -44,6 +44,18 @@ describe("renderCalendar", () => {
     expect(root.querySelector("a.back")).toBeNull();
   });
 
+  test("une petite plume animée se tient juste à côté du nom Kleio, dans le même groupe centré", () => {
+    renderCalendar(root, baseState, handlers());
+    const brand = root.querySelector(".nav .brand");
+    const plume = brand.querySelector("svg.plume");
+    expect(plume).not.toBeNull();
+    expect(plume.getAttribute("aria-hidden")).toBe("true");
+    expect(plume.querySelectorAll("path")).toHaveLength(4);
+    expect(plume.querySelector("g.plume__feather")).not.toBeNull();
+    expect(brand.textContent).toBe("Kleio");
+    expect(plume.nextSibling.textContent).toBe("Kleio");
+  });
+
   test("une phrase d'accueil, sous le nom Kleio, dit ce que fait l'app et s'adresse à la personne", () => {
     renderCalendar(root, baseState, handlers());
     const brand = root.querySelector(".brand");

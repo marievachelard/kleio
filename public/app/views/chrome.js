@@ -4,6 +4,30 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const GEAR_PATH =
   "M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z";
 
+const PLUME_PATHS = [
+  "M472 62 C420 30 280 30 200 90 L145 132 L132 150 L130 230 L102 180 C70 220 50 290 66 374 C110 384 160 384 192 375 L152 334 L240 327 L332 262 L268 236 C310 229 345 226 362 210 L438 140 C460 110 470 85 472 62 Z",
+  "M382 122 C410 124 435 118 455 108",
+  "M245 82 C238 100 236 115 240 128",
+  "M308 132 C230 190 120 280 75 365 C55 400 42 440 40 470",
+];
+
+/** Plume « Respiration » : trait de la couleur du texte, qui bouge très légèrement (voir styles.css). */
+function plumeIcon() {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("class", "plume");
+  svg.setAttribute("viewBox", "0 0 512 512");
+  svg.setAttribute("aria-hidden", "true");
+  const group = document.createElementNS(SVG_NS, "g");
+  group.setAttribute("class", "plume__feather");
+  for (const d of PLUME_PATHS) {
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", d);
+    group.append(path);
+  }
+  svg.append(group);
+  return svg;
+}
+
 function gearIcon() {
   const svg = document.createElementNS(SVG_NS, "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
@@ -35,7 +59,7 @@ export function header({ back = false, tagline = null, settings = false } = {}) 
     h(
       "div",
       { class: "nav" },
-      h("span", { class: "brand" }, "Kleio"),
+      h("span", { class: "brand" }, plumeIcon(), "Kleio"),
       settings ? h("a", { class: "settings-link", href: "#/setup", "aria-label": "Réglages" }, gearIcon()) : null,
     ),
     tagline ? h("p", { class: "tagline" }, tagline) : null,

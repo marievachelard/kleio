@@ -95,6 +95,12 @@ describe("renderDetail", () => {
     expect(back.getAttribute("href")).toBe("#/calendar");
   });
 
+  test("la plume animée accompagne aussi le nom Kleio sur le détail", () => {
+    renderDetail(root, view());
+    expect(root.querySelector(".brand svg.plume")).not.toBeNull();
+    expect(root.querySelector(".brand").textContent).toBe("Kleio");
+  });
+
   test("l'icône de réglages n'apparaît pas sur le détail", () => {
     renderDetail(root, view());
     expect(root.querySelector(".settings-link")).toBeNull();
