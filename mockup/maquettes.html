@@ -1,0 +1,209 @@
+<title>Kleio, maquettes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Concept : style iOS natif, surfaces grises neutres, une seule couleur clé (indigo système). Trois écrans, puis des pistes de nom. */
+:root{
+  --bg:#f2f2f7; --card:#ffffff; --fg:#1c1c1e; --mut:#6c6c70; --line:#e0e0e6; --key:#d9480f; --key-soft:#fdebe0; --on-key:#ffffff; --warn-bg:#fff6dc;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000000;--card:#1c1c1e;--fg:#f5f5f7;--mut:#98989f;--line:#2c2c2e;--key:#ff8a4c;--key-soft:#3a2316;--on-key:#1a0f08;--warn-bg:#2b2610;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000000;--card:#1c1c1e;--fg:#f5f5f7;--mut:#98989f;--line:#2c2c2e;--key:#ff8a4c;--key-soft:#3a2316;--on-key:#1a0f08;--warn-bg:#2b2610;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:clamp(30px,5vw,40px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px}
+h2{font-size:24px;font-weight:700;letter-spacing:-.015em;margin:56px 0 6px}
+.lede{color:var(--mut);max-width:62ch;margin:0}
+.note{font-family:var(--mono);font-size:12px;color:var(--mut);margin:0 0 6px}
+.row{display:flex;flex-wrap:wrap;gap:28px;margin-top:26px}
+.fig{display:flex;flex-direction:column;gap:12px;min-width:0}
+.cap{font-size:13.5px;color:var(--mut);max-width:300px}
+.cap b{color:var(--fg);font-weight:600}
+
+/* téléphone : l'écran suit le thème du viewer, comme iOS */
+.phone{width:300px;height:660px;border-radius:44px;border:9px solid #0a0a0c;overflow:hidden;position:relative;flex:none;background:var(--bg);color:var(--fg);box-shadow:0 18px 40px -20px rgba(0,0,0,.5)}
+.phone::before{content:"";position:absolute;top:9px;left:50%;width:84px;height:24px;margin-left:-42px;border-radius:14px;background:#0a0a0c;z-index:5}
+.status{display:flex;justify-content:space-between;padding:14px 26px 0;font-size:13px;font-weight:600}
+.scroll{height:100%;overflow:hidden}
+
+/* écran verrouillé */
+.lock{height:100%;padding:0 12px;background:linear-gradient(170deg,color-mix(in srgb,var(--key) 60%,#000),#0c0c10 72%);color:#fff}
+.lock .status{padding:14px 14px 0}
+.lock .clock{text-align:center;margin-top:60px}
+.lock .d{font-size:15px;opacity:.85}
+.lock .t{font-size:80px;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+.notif{margin-top:48px;background:rgba(255,255,255,.18);backdrop-filter:blur(14px);border-radius:20px;padding:12px 14px}
+.notif .top{display:flex;align-items:center;gap:8px;font-size:12px;opacity:.85;margin-bottom:6px}
+.ico{width:22px;height:22px;border-radius:6px;background:var(--key);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--on-key);opacity:1}
+.notif .top span:last-child{margin-left:auto}
+.notif b{display:block;font-size:15px;font-weight:600;margin-bottom:2px}
+.notif p{margin:0;font-size:14px;line-height:1.35}
+
+/* barre de nav iOS */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 4px;font-size:15px;color:var(--key-text)}
+.nav span:first-child{display:flex;align-items:center;gap:2px}
+.nav{display:flex;justify-content:center;align-items:center}
+.back2{padding:8px 16px 0;font-size:15px;color:var(--key-text)}
+.brand{color:var(--key-text);font-weight:600;font-size:17px}
+.chip.star{background:var(--key);color:var(--on-key)}
+.pad{padding:0 16px}
+.large{font-size:32px;font-weight:700;letter-spacing:-.02em;margin:8px 0 2px}
+.sub{font-size:13px;color:var(--mut);margin:0 0 12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.chip{font-size:11.5px;font-weight:600;color:var(--key-text);background:var(--key-soft);border-radius:999px;padding:3px 10px}
+.group{background:var(--card);border-radius:14px;padding:12px 14px;margin-top:10px}
+.group h4{margin:0 0 4px;font-size:12px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.group p{margin:0;font-size:14px;line-height:1.45}
+.group p + p{margin-top:6px}
+.fun h4{color:var(--key-text)}
+.more{background:var(--key);color:var(--on-key);border-radius:14px;padding:13px 14px;margin-top:10px}
+.more p{margin:0 0 9px;font-size:14px;font-weight:600;line-height:1.35}
+.more .src{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.2);border-radius:10px;padding:8px 11px;font-size:13px;font-weight:600}
+.more .src small{font-weight:400;opacity:.85;font-size:11.5px;display:block}
+.pickcard{display:flex;align-items:flex-start;gap:12px}
+.pickcard>div{min-width:0;flex:1}
+.go{flex:none;width:24px;height:24px;border-radius:7px;background:var(--key);color:var(--on-key);display:grid;place-items:center;margin-top:-3px}
+.mtitle{display:flex;align-items:baseline;gap:8px}
+.mnav{display:flex;gap:20px;align-items:center;color:var(--key-text)}
+.mnav .dis{opacity:.3}
+.srcline{font-size:12px;color:var(--mut);margin:10px 2px 0}
+.srcline a{color:var(--key-text);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.year{display:flex;gap:10px;font-size:13px;padding-top:7px;margin-top:7px;border-top:1px solid var(--line)}
+.year b{color:var(--key-text);font-weight:600;flex:none}
+
+/* calendrier */
+.mhead{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px}
+.mhead .large{margin:0}
+.mhead span{color:var(--key-text);font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:14px;text-align:center}
+.grid .h{font-size:11px;color:var(--mut);padding-bottom:6px;font-weight:600}
+.grid .c{aspect-ratio:1;display:grid;place-items:center;font-size:16px;border-radius:50%;position:relative}
+.grid .c::after{content:"";position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--line)}
+.grid .c.fut{color:var(--mut)}
+.grid .c.off{color:var(--mut);opacity:.4}
+.grid .c.off::after{display:none}
+.grid .c.today{background:var(--key);color:var(--on-key);font-weight:600}
+.grid .c.today::after{background:var(--on-key)}
+.grid .c.star{color:var(--key-text);font-weight:700}
+.grid .c.star::after{content:"★";width:auto;height:auto;background:none;border-radius:0;font-size:9px;line-height:1;bottom:2px;color:var(--key-text)}
+.legend{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--mut)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+
+/* noms */
+.names{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:22px}
+.nm{background:var(--card);border-radius:16px;padding:16px 18px}
+.nm .big{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.nm p{margin:4px 0 0;font-size:14px;color:var(--mut)}
+.nm.pick{outline:2px solid var(--key)}
+.tagline{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;color:var(--key)}
+
+/* couleur clé fixe */
+body{--key:#9FA0FF;--key-text:light-dark(#5052d6,#9FA0FF);--key-soft:color-mix(in srgb,var(--key) 20%,var(--card));--on-key:#15153d}
+.logos{display:flex;flex-wrap:wrap;gap:26px;margin-top:24px}
+.logo{display:flex;flex-direction:column;gap:10px;align-items:flex-start;width:170px}
+.icon{width:150px;height:150px;border-radius:34px;overflow:hidden;display:block;box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+.icon svg{display:block;width:100%;height:100%}
+.mini .icon{width:60px;height:60px;border-radius:14px;box-shadow:none}
+.logo b{font-size:14px;font-weight:600}
+.logo p{margin:0;font-size:13px;color:var(--mut)}
+.small{display:flex;gap:10px;align-items:center;margin-top:26px;color:var(--mut);font-size:13.5px}
+.small .icon{width:60px;height:60px;border-radius:14px;box-shadow:none}
+</style>
+
+<div class="wrap">
+  <p class="note">Maquettes, contenus d'exemple</p>
+  <h1>Kleio</h1>
+  <p class="lede">Style iOS natif, sobre, avec une seule couleur clé, un bleu lavande. Les écrans suivent le mode clair ou sombre de ton téléphone.</p>
+
+  <div class="row">
+    <div class="fig">
+      <div class="phone"><div class="lock">
+        <div class="status"><span>&nbsp;</span><span>5G ▮▮▮</span></div>
+        <div class="clock"><div class="d">lundi 16 novembre</div><div class="t">08:30</div></div>
+        <div class="notif">
+          <div class="top"><div class="ico"><svg viewBox="200 170 480 480" width="16" height="16" fill="none" stroke="var(--on-key)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"><path d="M662 218 C 600 190, 480 190, 322 303 L316 392 L292 340 C 235 410, 235 490, 262 525 C 300 545, 345 540, 378 525 L335 485 C 380 495, 410 495, 430 490 L520 415 L455 388 C 500 395, 530 390, 548 375 C 590 335, 625 285, 662 218 Z"/><path d="M498 292 C 400 355, 320 440, 262 525 C 235 565, 226 600, 226 632"/></svg></div><span>KLEIO</span><span>maintenant</span></div>
+          <b>16 novembre 1945</b>
+          <p>Naissance de l'UNESCO : 37 pays signent à Londres l'acte fondateur d'une organisation pour l'éducation, la science et la culture.</p>
+        </div>
+      </div></div>
+      <div class="cap"><b>1. Notification</b><br>Un titre daté, deux phrases. L'essentiel sans rien ouvrir.</div>
+    </div>
+
+    <div class="fig">
+      <div class="phone" style="height:auto;min-height:660px"><div class="scroll" style="padding-bottom:22px">
+        <div class="status"><span>08:31</span><span>5G ▮▮▮</span></div>
+        <div class="nav"><span class="brand">Kleio</span></div><div class="back2">‹ Calendrier</div>
+        <div class="pad">
+          <div class="large">16 novembre 1945</div>
+          <div class="chips"><span class="chip">Monde</span><span class="chip">Institutions</span></div>
+          <div class="group"><h4>L'essentiel</h4><p>À Londres, 37 pays adoptent l'acte constitutif de l'UNESCO, l'agence de l'ONU pour l'éducation, la science et la culture.</p></div>
+          <div class="group"><h4>Le contexte</h4><p>La conférence est organisée par le Royaume-Uni et la France, quelques mois après la fin de la guerre en Europe. L'idée : empêcher un nouveau conflit en travaillant sur les esprits, par l'école, la science et la culture.</p><p>L'organisation entre en action en 1946, avec son siège à Paris.</p></div>
+          <div class="group fun"><h4>Le saviez-vous</h4><p>Son texte fondateur affirme que « les guerres prenant naissance dans l'esprit des hommes, c'est dans l'esprit des hommes que doivent être élevées les défenses de la paix ».</p></div>
+          <div class="more"><p>Une organisation née pour qu'on n'ait plus à refaire la guerre. L'histoire complète se lit en quelques minutes.</p><div class="src"><span>Lire l'article<small>Histoire de l'UNESCO</small></span><span>↗</span></div></div>
+          <div class="srcline">Source : <a href="#">unesco.org</a></div>
+        </div>
+      </div></div>
+      <div class="cap"><b>2. Détail</b><br>Contexte plus développé, anecdote, phrase d'invitation, puis la source cliquable tout en bas.</div>
+    </div>
+
+    <div class="fig">
+      <div class="phone"><div class="scroll">
+        <div class="status"><span>08:32</span><span>5G ▮▮▮</span></div>
+        <div class="nav"><span class="brand">Kleio</span></div>
+        <div class="pad">
+          <div class="mhead"><div class="mtitle"><div class="large">Novembre</div><span>2026</span></div><div class="mnav" role="group" aria-label="Changer de mois"><svg class="dis" viewBox="0 0 10 16" width="9" height="15" role="img" aria-label="Mois précédent, indisponible avant le lancement"><path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="dis" viewBox="0 0 10 16" width="9" height="15" role="img" aria-label="Mois suivant, indisponible"><path d="M2 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          <div class="grid" id="grid"></div>
+          <div class="group pickcard" style="margin-top:16px"><div><h4>16 novembre 1945</h4><p>Création de l'UNESCO : 37 pays signent à Londres l'acte fondateur d'une organisation pour l'éducation, la science et la culture.</p></div><span class="go" role="img" aria-label="Voir le détail"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2.5 9.5l7-7M3.5 2.5h6v6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          
+        </div>
+      </div></div>
+      <div class="cap"><b>3. Calendrier</b><br>Les flèches à côté du mois (ou un glissement du doigt) changent de mois, entre le mois du lancement et le mois en cours : elles sont grisées pour l'instant. Le jour touché s'affiche en dessous, et la flèche ouvre son détail.</div>
+    </div>
+    <div class="fig">
+      <div class="phone" style="height:380px"><div class="scroll">
+        <div class="status"><span>08:31</span><span>5G ▮▮▮</span></div>
+        <div class="nav"><span class="brand">Kleio</span></div><div class="back2">‹ Calendrier</div>
+        <div class="pad">
+          <div class="large">11 novembre 1918</div>
+          <div class="chips"><span class="chip">France</span><span class="chip">Guerre</span><span class="chip star">★ Incontournable</span></div>
+          <div class="group"><h4>L'essentiel</h4><p>L'armistice, signé dans un wagon près de Compiègne, entre en vigueur à 11 h et met fin aux combats de la Première Guerre mondiale.</p></div>
+        </div>
+      </div></div>
+      <div class="cap"><b>Date incontournable.</b><br>Les jours marqués d'une étoile dans le calendrier portent l'étiquette « Incontournable » dans leur détail.</div>
+    </div>
+  </div>
+
+  <h2>Logo</h2>
+  <p class="lede">Logo retenu : la plume au trait. Il apparaît aussi dans la notification, en tout petit.</p>
+  <div class="logos"><div class="logo"><div class="icon"><svg viewBox="0 0 512 512" role="img" aria-label="Logo Kleio"><defs>
+<linearGradient id="Abg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#B9BAFF"/><stop offset="1" stop-color="#7F81F0"/></linearGradient>
+<radialGradient id="Agl" cx="0.5" cy="0.28" r="0.8"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="Ash" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#10116a" flood-opacity=".4"/></filter>
+<linearGradient id="Aqf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#DADBFF"/></linearGradient>
+<linearGradient id="Aqd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C4C5FF"/><stop offset="1" stop-color="#8E90F7"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="url(#Abg)"/><rect width="512" height="512" fill="url(#Agl)"/><g transform="translate(-54.8 -31.7) scale(0.7)" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><path d="M662 218 C 600 190, 480 190, 322 303 L316 392 L292 340 C 235 410, 235 490, 262 525 C 300 545, 345 540, 378 525 L335 485 C 380 495, 410 495, 430 490 L520 415 L455 388 C 500 395, 530 390, 548 375 C 590 335, 625 285, 662 218 Z"/><path d="M498 292 C 400 355, 320 440, 262 525 C 235 565, 226 600, 226 632"/><path d="M440 230 C 428 245, 428 270, 432 285"/><path d="M570 282 C 600 285, 620 278, 635 265"/></g></svg></div><div class="mini"><div class="icon"><svg viewBox="0 0 512 512" role="img" aria-label="Logo Kleio"><defs>
+<linearGradient id="Abg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#B9BAFF"/><stop offset="1" stop-color="#7F81F0"/></linearGradient>
+<radialGradient id="Agl" cx="0.5" cy="0.28" r="0.8"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="Ash" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#10116a" flood-opacity=".4"/></filter>
+<linearGradient id="Aqf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#DADBFF"/></linearGradient>
+<linearGradient id="Aqd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C4C5FF"/><stop offset="1" stop-color="#8E90F7"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="url(#Abg)"/><rect width="512" height="512" fill="url(#Agl)"/><g transform="translate(-54.8 -31.7) scale(0.7)" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><path d="M662 218 C 600 190, 480 190, 322 303 L316 392 L292 340 C 235 410, 235 490, 262 525 C 300 545, 345 540, 378 525 L335 485 C 380 495, 410 495, 430 490 L520 415 L455 388 C 500 395, 530 390, 548 375 C 590 335, 625 285, 662 218 Z"/><path d="M498 292 C 400 355, 320 440, 262 525 C 235 565, 226 600, 226 632"/><path d="M440 230 C 428 245, 428 270, 432 285"/><path d="M570 282 C 600 285, 620 278, 635 265"/></g></svg></div></div><b>Kleio</b><p>Plume au trait, blanche sur lavande.</p></div></div>
+</div>
+
+<script>
+(function(){
+  var g=document.getElementById('grid');if(!g)return;
+  var h='';['L','M','M','J','V','S','D'].forEach(function(d){h+='<div class="h">'+d+'</div>'});
+  for(var i=0;i<6;i++)h+='<div></div>';
+  for(var d=1;d<=30;d++){
+    var c='c';if(d===16)c+=' today';else if(d===11)c+=' star';else if(d>16||d<9)c+=' off';
+    h+='<div class="'+c+'">'+d+'</div>';
+  }
+  g.innerHTML=h;
+})();
+
+
+</script>

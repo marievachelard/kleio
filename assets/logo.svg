@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><defs>
+<linearGradient id="Abg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#B9BAFF"/><stop offset="1" stop-color="#7F81F0"/></linearGradient>
+<radialGradient id="Agl" cx="0.5" cy="0.28" r="0.8"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="Ash" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#10116a" flood-opacity=".4"/></filter>
+<linearGradient id="Aqf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#DADBFF"/></linearGradient>
+<linearGradient id="Aqd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C4C5FF"/><stop offset="1" stop-color="#8E90F7"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="url(#Abg)"/><rect width="512" height="512" fill="url(#Agl)"/><g transform="translate(-54.8 -31.7) scale(0.7)" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"><path d="M662 218 C 600 190, 480 190, 322 303 L316 392 L292 340 C 235 410, 235 490, 262 525 C 300 545, 345 540, 378 525 L335 485 C 380 495, 410 495, 430 490 L520 415 L455 388 C 500 395, 530 390, 548 375 C 590 335, 625 285, 662 218 Z"/><path d="M498 292 C 400 355, 320 440, 262 525 C 235 565, 226 600, 226 632"/><path d="M440 230 C 428 245, 428 270, 432 285"/><path d="M570 282 C 600 285, 620 278, 635 265"/></g></svg>
