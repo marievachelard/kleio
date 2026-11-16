@@ -40,3 +40,64 @@ body {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+
+/* ---------- Composants ---------- */
+.nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; }
+.brand { color: var(--key-text); font-weight: 600; font-size: 17px; }
+.back { display: inline-block; padding: 8px 0 0; font-size: 15px; color: var(--key-text); text-decoration: none; }
+.pad { padding: 0; }
+.large { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 2px; line-height: 1.15; }
+h1.large { text-wrap: balance; }
+.empty { color: var(--mut); margin-top: 24px; }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 10px; }
+.chip { font-size: 11.5px; font-weight: 600; color: var(--key-text); background: var(--key-soft); border-radius: 999px; padding: 3px 10px; }
+.chip.star { background: var(--key); color: var(--on-key); }
+
+.group { background: var(--card); border-radius: 14px; padding: 12px 14px; margin-top: 10px; }
+.group h2, .group h4 { margin: 0 0 4px; font-size: 12px; font-weight: 600; color: var(--mut); text-transform: uppercase; letter-spacing: 0.04em; }
+.group p { margin: 0; font-size: 15px; line-height: 1.45; }
+.group p + p { margin-top: 8px; }
+.group.fun h2 { color: var(--key-text); }
+
+.more { background: var(--key); color: var(--on-key); border-radius: 14px; padding: 13px 14px; margin-top: 10px; }
+.more p { margin: 0 0 10px; font-size: 15px; font-weight: 600; line-height: 1.35; }
+.src { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 9px 12px; font-size: 14px; font-weight: 600; color: inherit; text-decoration: none; }
+.src small { display: block; font-weight: 400; opacity: 0.85; font-size: 12px; }
+
+.previous .year { display: flex; gap: 10px; font-size: 14px; padding: 7px 0 0; margin-top: 7px; border-top: 1px solid var(--line); color: inherit; text-decoration: none; }
+.previous h2 + .year { border-top: 0; margin-top: 0; padding-top: 0; }
+.previous .year b { color: var(--key-text); font-weight: 600; flex: none; }
+
+.srcline { font-size: 12px; color: var(--mut); margin: 10px 2px 24px; }
+.srcline a { color: var(--key-text); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Calendrier */
+.mhead { display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; }
+.mtitle { display: flex; align-items: baseline; gap: 8px; }
+.mtitle .large { margin: 0; }
+.mtitle span { color: var(--key-text); font-size: 17px; }
+.mnav { display: flex; gap: 20px; align-items: center; }
+.mnav button { appearance: none; border: 0; background: none; padding: 6px; color: var(--key-text); cursor: pointer; }
+.mnav button.dis { opacity: 0.3; cursor: default; }
+
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 14px; text-align: center; touch-action: pan-y; }
+.grid .h { font-size: 11px; color: var(--mut); padding-bottom: 6px; font-weight: 600; }
+.grid .c { appearance: none; border: 0; background: none; font: inherit; color: var(--fg); aspect-ratio: 1; display: grid; place-items: center; font-size: 16px; border-radius: 50%; position: relative; cursor: pointer; padding: 0; }
+.grid .c::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+.grid .c[aria-disabled="true"] { color: var(--mut); opacity: 0.4; cursor: default; }
+.grid .c[aria-disabled="true"]::after { display: none; }
+.grid .c.today { background: var(--key); color: var(--on-key); font-weight: 600; }
+.grid .c.today::after { background: var(--on-key); }
+.grid .c.sel { outline: 2px solid var(--key); outline-offset: -2px; }
+.grid .c.star { color: var(--key-text); font-weight: 700; }
+.grid .c.star.today { color: var(--on-key); }
+.grid .c.star::after { display: none; }
+.grid .c .mark { position: absolute; bottom: 1px; font-size: 9px; line-height: 1; }
+
+.pickcard { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; }
+.pickcard > div { min-width: 0; flex: 1; }
+.go { appearance: none; border: 0; flex: none; width: 24px; height: 24px; border-radius: 7px; background: var(--key); color: var(--on-key); display: grid; place-items: center; margin-top: -3px; cursor: pointer; padding: 0; }
+
+/* Sur grand écran, le contenu garde une largeur de téléphone. */
+#app { max-width: 520px; margin: 0 auto; }
