@@ -105,7 +105,7 @@ export function renderCalendar(root, state, handlers) {
   }
 
   root.replaceChildren(
-    ...header().filter(Boolean),
+    ...header({ tagline: "Chaque matin, un fait d'histoire important à glisser dans ta culture." }).filter(Boolean),
     h(
       "main",
       { class: "pad" },

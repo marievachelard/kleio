@@ -44,6 +44,7 @@ body {
 /* ---------- Composants ---------- */
 .nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; }
 .brand { color: var(--key-text); font-weight: 600; font-size: 17px; }
+.tagline { margin: 2px 0 10px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
 .back { display: inline-block; padding: 8px 0 0; font-size: 15px; color: var(--key-text); text-decoration: none; }
 .pad { padding: 0; }
 .large { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 2px; line-height: 1.15; }

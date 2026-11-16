@@ -44,6 +44,15 @@ describe("renderCalendar", () => {
     expect(root.querySelector("a.back")).toBeNull();
   });
 
+  test("une phrase d'accueil, sous le nom Kleio, dit ce que fait l'app et s'adresse à la personne", () => {
+    renderCalendar(root, baseState, handlers());
+    const brand = root.querySelector(".brand");
+    const tagline = root.querySelector(".tagline");
+    expect(tagline.textContent).toBe("Chaque matin, un fait d'histoire important à glisser dans ta culture.");
+    expect(brand.parentElement.nextElementSibling).toBe(tagline);
+    expect(tagline.textContent).not.toMatch(/[·—]/);
+  });
+
   test("novembre 2026 commence un dimanche : six cases vides avant le 1er", () => {
     renderCalendar(root, baseState, handlers());
     expect(root.querySelectorAll(".grid .blank")).toHaveLength(6);
