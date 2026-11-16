@@ -88,8 +88,17 @@ describe("renderCalendar", () => {
     renderCalendar(root, baseState, handlers());
     expect(cell(16).classList.contains("today")).toBe(true);
     expect(cell(11).classList.contains("star")).toBe(true);
-    expect(cell(11).textContent).toContain("★");
-    expect(cell(12).textContent).not.toContain("★");
+    expect(cell(11).querySelector(".mark svg")).not.toBeNull();
+    expect(cell(11).textContent).not.toContain("★");
+    expect(cell(12).querySelector(".mark")).toBeNull();
+  });
+
+  test("l'étoile est un dessin centré : son centre horizontal est celui du dessin, jamais celui d'une police", () => {
+    renderCalendar(root, baseState, handlers());
+    const star = cell(11).querySelector(".mark svg");
+    const [x0, , w] = star.getAttribute("viewBox").split(" ").map(Number);
+    const xs = star.querySelector("polygon").getAttribute("points").split(" ").map((p) => Number(p.split(",")[0]));
+    expect((Math.min(...xs) + Math.max(...xs)) / 2).toBeCloseTo(x0 + w / 2, 2);
   });
 
   test("toucher un jour actif appelle onSelect, un jour grisé ne fait rien", () => {

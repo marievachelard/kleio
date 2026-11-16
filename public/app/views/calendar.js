@@ -4,6 +4,21 @@ import { header } from "./chrome.js";
 
 const WEEKDAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+// Étoile à 5 branches dessinée (et non un caractère de police) : elle reste centrée quel que soit le téléphone.
+const STAR_POINTS = "6.000,0.000 7.411,4.058 11.706,4.146 8.283,6.742 9.527,10.854 6.000,8.400 2.473,10.854 3.717,6.742 0.294,4.146 4.589,4.058";
+
+function starIcon() {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 12 12");
+  svg.setAttribute("aria-hidden", "true");
+  const polygon = document.createElementNS(SVG_NS, "polygon");
+  polygon.setAttribute("points", STAR_POINTS);
+  polygon.setAttribute("fill", "currentColor");
+  svg.append(polygon);
+  return svg;
+}
+
 function chevron(direction) {
   return direction < 0
     ? svg("0 0 10 16", [9, 15], "M8 2L2 8l6 6", 2.2)
@@ -64,7 +79,7 @@ export function renderCalendar(root, state, handlers) {
           },
         },
         h("span", { class: "n" }, d),
-        item && item.pinned ? h("span", { class: "mark", "aria-hidden": "true" }, "★") : null,
+        item && item.pinned ? h("span", { class: "mark", "aria-hidden": "true" }, starIcon()) : null,
       ),
     );
   }
