@@ -34,8 +34,8 @@ Marie veut commencer sa journée par une « nouvelle du monde historique » : ap
 ## Ce que Marie a décidé
 
 - **Nom** : Kleio (écriture grecque de Clio, muse de l'histoire). Clio seul est exclu à cause de la voiture.
-- **Logo** : la plume au trait, blanche sur fond lavande. Fichier : `assets/logo.svg`. Dessin d'origine fourni par Marie, repris dans le logo.
-- **Direction visuelle** : style des apps natives d'Apple, sobre. Une seule couleur clé : `#9FA0FF` (lavande). Cette couleur est trop claire pour du texte sur fond blanc : en mode clair, le texte et les liens utilisent une version plus foncée (`#5052D6` dans les maquettes). Mode clair et mode sombre suivent le réglage du téléphone.
+- **Logo** : la plume au trait, blanche sur fond rouge brique. Fichier : `assets/logo.svg`. Dessin d'origine fourni par Marie, repris dans le logo.
+- **Direction visuelle** : style des apps natives d'Apple, sobre. Une seule couleur clé : `#BA5A53` (rouge brique, choisie par Marie à la place du lavande `#9FA0FF` initial). Elle sert aux aplats (date du jour, bouton « Lire l'article », étiquette Incontournable, icône) avec du texte blanc dessus. En mode clair, le texte et les liens utilisent une version un peu plus foncée (`#A94A43`) pour rester lisibles ; en mode sombre, une version plus claire (`#E08A83`). Mode clair et mode sombre suivent le réglage du téléphone.
 - **Maquettes de référence** : `mockup/maquettes.html` (publié aussi : https://claude.ai/artifact/J4xRT1hGUQ95V5DveXDH3m). Trois écrans : notification sur écran verrouillé, détail, calendrier.
 - **Un seul fait par jour** dans la notification.
 - **Historique, pas d'avance** : le calendrier et le détail ne montrent que les jours déjà passés depuis le lancement, jour même inclus. Exemple donné par Marie : si le premier jour est le 17 novembre, elle ne voit que le 17 novembre ; trois jours plus tard, elle voit les trois jours écoulés. Les faits à venir ne doivent pas être visibles dans l'application.
@@ -113,5 +113,5 @@ Marie installe Kleio sur son iPhone 16 en moins de cinq minutes, accepte les not
 - Le calendrier n'a pas de bouton « ‹ Aujourd'hui » : le jour d'aujourd'hui est sélectionné à l'ouverture.
 - **Changer de mois** : deux flèches à droite du titre du mois, et un glissement horizontal du doigt. L'année s'affiche à côté du nom du mois. La navigation va du mois du lancement au mois en cours : la flèche précédente est grisée dans le mois du lancement, la flèche suivante dans le mois en cours.
 - Dans la carte du jour sélectionné, le bouton qui ouvre le détail est le même que le bouton « Lire l'article » de l'écran de détail : un petit carré arrondi couleur clé avec une flèche ↗ foncée, aligné sur la ligne du titre de la carte.
-- **En-tête commun** aux écrans Détail et Calendrier : le nom « Kleio », centré, en texte lavande (sans logo), seul sur sa ligne. Sur le Détail, le bouton de retour « ‹ Calendrier » est sur la ligne du dessous, à gauche, au-dessus du titre.
-- **Étiquette « ★ Incontournable »** : dans le détail d'une date incontournable, elle s'ajoute aux étiquettes (France ou Monde, thème), en couleur clé pleine avec texte foncé. Les dates non incontournables n'ont pas cette étiquette.
+- **En-tête commun** aux écrans Détail et Calendrier : le nom « Kleio », centré, en texte couleur clé (sans logo), seul sur sa ligne. Sur le Détail, le bouton de retour « ‹ Calendrier » est sur la ligne du dessous, à gauche, au-dessus du titre.
+- **Étiquette « ★ Incontournable »** : dans le détail d'une date incontournable, elle s'ajoute aux étiquettes (France ou Monde, thème), en couleur clé pleine avec texte blanc. Les dates non incontournables n'ont pas cette étiquette.
