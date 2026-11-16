@@ -45,7 +45,7 @@ body {
 .nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; position: relative; }
 .settings-link { position: absolute; right: -6px; top: 50%; transform: translateY(-40%); width: 36px; height: 36px; display: grid; place-items: center; color: var(--mut); border-radius: 50%; }
 .brand { color: var(--key-text); font-weight: 600; font-size: 17px; }
-.tagline { margin: 2px 0 10px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
+.tagline { margin: 2px 0 22px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
 .back { display: inline-block; padding: 8px 0 0; font-size: 15px; color: var(--key-text); text-decoration: none; }
 .pad { padding: 0; }
 .large { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 2px; line-height: 1.15; }
@@ -90,9 +90,9 @@ h1.large { text-wrap: balance; }
 .grid .c[aria-disabled="true"] { color: var(--mut); opacity: 0.4; cursor: default; }
 .grid .c[aria-disabled="true"]::after { display: none; }
 .grid .c.today { color: var(--on-key); font-weight: 600; }
-.grid .c.today::before { content: ""; position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: var(--key); z-index: -1; }
+.grid .c.today::before { content: ""; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--key); z-index: -1; }
 .grid .c.today::after { background: var(--on-key); }
-.grid .c.sel::before { content: ""; position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 2px solid var(--key); box-sizing: border-box; z-index: -1; }
+.grid .c.sel::before { content: ""; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid var(--key); box-sizing: border-box; z-index: -1; }
 .grid .c.star { color: var(--key-text); font-weight: 700; }
 .grid .c.star.today { color: var(--on-key); }
 .grid .c.star::after { display: none; }
