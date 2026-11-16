@@ -48,9 +48,26 @@ describe("renderCalendar", () => {
     renderCalendar(root, baseState, handlers());
     const brand = root.querySelector(".brand");
     const tagline = root.querySelector(".tagline");
-    expect(tagline.textContent).toBe("Chaque matin, un fait d'histoire important à glisser dans ta culture.");
+    expect(tagline.textContent).toBe("Chaque matin, un fait d'histoire.");
     expect(brand.parentElement.nextElementSibling).toBe(tagline);
     expect(tagline.textContent).not.toMatch(/[·—]/);
+  });
+
+  test("le réglage est une icône en haut à droite, sur la ligne du nom Kleio", () => {
+    renderCalendar(root, baseState, handlers());
+    const nav = root.querySelector(".nav");
+    const settings = nav.querySelector("a.settings-link");
+    expect(settings).not.toBeNull();
+    expect(settings.getAttribute("href")).toBe("#/setup");
+    expect(settings.getAttribute("aria-label")).toBe("Réglages");
+    expect(settings.querySelector("svg")).not.toBeNull();
+    expect(nav.querySelector(".brand").textContent).toBe("Kleio");
+  });
+
+  test("il n'y a plus de lien « Réglages » en bas de page", () => {
+    renderCalendar(root, baseState, handlers());
+    expect(root.querySelector("a.settings")).toBeNull();
+    expect(root.querySelector("main").textContent).not.toContain("Réglages");
   });
 
   test("novembre 2026 commence un dimanche : six cases vides avant le 1er", () => {

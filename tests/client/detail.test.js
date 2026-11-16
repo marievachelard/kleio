@@ -95,6 +95,11 @@ describe("renderDetail", () => {
     expect(back.getAttribute("href")).toBe("#/calendar");
   });
 
+  test("l'icône de réglages n'apparaît pas sur le détail", () => {
+    renderDetail(root, view());
+    expect(root.querySelector(".settings-link")).toBeNull();
+  });
+
   test("le texte du contenu n'est jamais interprété comme du HTML", () => {
     renderDetail(root, view({ fact: { ...fact, title: "<img src=x onerror=alert(1)>", essential: "<b>gras</b>" } }));
     expect(root.querySelector("img")).toBeNull();

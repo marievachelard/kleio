@@ -128,5 +128,6 @@ Marie veut que n'importe qui avec le lien puisse utiliser Kleio (pour l'instant 
 - Le bouton de test et l'écran de statut ne concernent que le téléphone qui les utilise.
 
 Dans l'interface, on parle toujours d'« activer les notifications » : jamais d'« inscription », de compte ou de connexion, pour ne pas laisser croire qu'il faut un compte.
-- **Phrase d'accueil** sur l'écran du calendrier, sous le nom « Kleio » : « Chaque matin, un fait d'histoire important à glisser dans ta culture. » (tutoiement, en gris, centrée). Elle explique ce que fait l'app.
+- **Phrase d'accueil** sur l'écran du calendrier, sous le nom « Kleio » : « Chaque matin, un fait d'histoire. » (en gris, centrée). Elle explique ce que fait l'app.
+- **Réglages** : une petite icône d'engrenage, en haut à droite de l'écran du calendrier, sur la même ligne que « Kleio ». Il n'y a plus de lien « Réglages » en bas de page, ni d'icône sur les écrans de détail.
 - **Ouverture de l'app** (changement du 2026-11-16, demande de Marie) : ouvrir Kleio depuis l'icône arrive toujours sur l'écran Calendrier. Seul un toucher sur une notification ouvre directement l'écran de détail du jour.

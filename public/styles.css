@@ -42,7 +42,8 @@ body {
 }
 
 /* ---------- Composants ---------- */
-.nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; }
+.nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; position: relative; }
+.settings-link { position: absolute; right: -6px; top: 50%; transform: translateY(-40%); width: 36px; height: 36px; display: grid; place-items: center; color: var(--key-text); border-radius: 50%; }
 .brand { color: var(--key-text); font-weight: 600; font-size: 17px; }
 .tagline { margin: 2px 0 10px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
 .back { display: inline-block; padding: 8px 0 0; font-size: 15px; color: var(--key-text); text-decoration: none; }
@@ -111,4 +112,3 @@ h1.large { text-wrap: balance; }
 .btn.primary { background: var(--key); color: var(--on-key); }
 .alert { background: var(--key); color: var(--on-key); border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-weight: 600; font-size: 15px; }
 .msg { margin: 10px 2px 0; color: var(--mut); font-size: 14px; }
-.settings { display: block; text-align: center; margin: 22px 0 24px; font-size: 13px; color: var(--mut); text-decoration: none; }

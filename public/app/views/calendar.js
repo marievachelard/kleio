@@ -105,7 +105,7 @@ export function renderCalendar(root, state, handlers) {
   }
 
   root.replaceChildren(
-    ...header({ tagline: "Chaque matin, un fait d'histoire important à glisser dans ta culture." }).filter(Boolean),
+    ...header({ tagline: "Chaque matin, un fait d'histoire.", settings: true }).filter(Boolean),
     h(
       "main",
       { class: "pad" },
@@ -117,7 +117,6 @@ export function renderCalendar(root, state, handlers) {
       ),
       grid,
       card,
-      h("a", { class: "settings", href: "#/setup" }, "Réglages"),
     ),
   );
 }
