@@ -85,17 +85,18 @@ h1.large { text-wrap: balance; }
 
 .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 14px; text-align: center; touch-action: pan-y; }
 .grid .h { font-size: 11px; color: var(--mut); padding-bottom: 6px; font-weight: 600; }
-.grid .c { appearance: none; border: 0; background: none; font: inherit; color: var(--fg); aspect-ratio: 1; display: grid; place-items: center; font-size: 16px; border-radius: 50%; position: relative; cursor: pointer; padding: 0; }
-.grid .c::after { content: ""; position: absolute; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+.grid .c { appearance: none; border: 0; background: none; font: inherit; color: var(--fg); aspect-ratio: 1; display: grid; place-items: center; font-size: 16px; border-radius: 50%; position: relative; isolation: isolate; cursor: pointer; padding: 0; }
+.grid .c::after { content: ""; position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
 .grid .c[aria-disabled="true"] { color: var(--mut); opacity: 0.4; cursor: default; }
 .grid .c[aria-disabled="true"]::after { display: none; }
-.grid .c.today { background: var(--key); color: var(--on-key); font-weight: 600; }
+.grid .c.today { color: var(--on-key); font-weight: 600; }
+.grid .c.today::before { content: ""; position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: var(--key); z-index: -1; }
 .grid .c.today::after { background: var(--on-key); }
-.grid .c.sel { outline: 2px solid var(--key); outline-offset: -2px; }
+.grid .c.sel::before { content: ""; position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 2px solid var(--key); box-sizing: border-box; z-index: -1; }
 .grid .c.star { color: var(--key-text); font-weight: 700; }
 .grid .c.star.today { color: var(--on-key); }
 .grid .c.star::after { display: none; }
-.grid .c .mark { position: absolute; bottom: 1px; font-size: 9px; line-height: 1; }
+.grid .c .mark { position: absolute; left: 50%; transform: translateX(-50%); bottom: 8px; font-size: 9px; line-height: 1; }
 
 .pickcard { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; }
 .pickcard > div { min-width: 0; flex: 1; }
