@@ -3,12 +3,14 @@ import { h } from "./dom.js";
 import { parseRoute } from "./router.js";
 import { addMonth } from "./format.js";
 import { renderCalendar } from "./views/calendar.js";
-import { header } from "./views/chrome.js";
+import { header, mountHeader } from "./views/chrome.js";
 import { renderDetail, renderUnavailable } from "./views/detail.js";
 import { currentEndpoint, enablePush, fetchStatus, isEnabledBefore, isStandalone, sendTest } from "./push.js";
 import { renderSetup } from "./views/setup.js";
 
 const root = document.getElementById("app");
+// L'en-tête (nom, plume, réglages) est créé une seule fois : il ne se reconstruit jamais quand on change d'écran.
+const pageHeader = mountHeader(document.getElementById("app-header"));
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js").catch(() => {});
@@ -87,6 +89,7 @@ async function showSetup(message = "") {
 
 async function route() {
   const target = parseRoute(location.hash);
+  pageHeader.showSettings(target.name === "calendar");
   try {
     if (target.name === "day") await showDay(target.date);
     else if (target.name === "setup") await showSetup();

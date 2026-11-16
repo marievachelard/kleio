@@ -51,17 +51,23 @@ function gearIcon() {
 }
 
 /**
- * En-tête commun : « Kleio » centré (avec, sur le calendrier, l'icône de réglages à droite sur la même ligne),
- * puis éventuellement une phrase d'accueil et le retour vers le calendrier.
+ * En-tête permanent : « Kleio » centré, suivi de la plume animée, et l'icône de réglages à droite.
+ * Il est créé UNE SEULE FOIS au démarrage, hors de la zone que les écrans remplacent : la plume garde donc
+ * son mouvement quand on change de page. Seule l'icône de réglages est affichée ou masquée selon l'écran.
  */
-export function header({ back = false, tagline = null, settings = false } = {}) {
+export function mountHeader(container) {
+  const settings = h("a", { class: "settings-link", href: "#/setup", "aria-label": "Réglages", hidden: true }, gearIcon());
+  container.replaceChildren(h("div", { class: "nav" }, h("span", { class: "brand" }, "Kleio", plumeIcon()), settings));
+  return {
+    showSettings(visible) {
+      settings.hidden = !visible;
+    },
+  };
+}
+
+/** Éléments propres à un écran, juste sous l'en-tête permanent : phrase d'accueil et retour vers le calendrier. */
+export function header({ back = false, tagline = null } = {}) {
   return [
-    h(
-      "div",
-      { class: "nav" },
-      h("span", { class: "brand" }, "Kleio", plumeIcon()),
-      settings ? h("a", { class: "settings-link", href: "#/setup", "aria-label": "Réglages" }, gearIcon()) : null,
-    ),
     tagline ? h("p", { class: "tagline" }, tagline) : null,
     back ? h("a", { class: "back", href: "#/calendar" }, "‹ Calendrier") : null,
   ];

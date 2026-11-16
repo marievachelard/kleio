@@ -38,43 +38,18 @@ const cell = (n) => root.querySelector(`[data-date="2026-11-${String(n).padStart
 describe("renderCalendar", () => {
   test("affiche le mois, l'année et l'en-tête Kleio", () => {
     renderCalendar(root, baseState, handlers());
-    expect(root.querySelector(".brand").textContent).toBe("Kleio");
+    expect(root.querySelector(".nav")).toBeNull(); // le nom Kleio et la plume vivent dans l'en-tête permanent
     expect(root.querySelector(".mtitle .large").textContent).toBe("Novembre");
     expect(root.querySelector(".mtitle span").textContent).toBe("2026");
     expect(root.querySelector("a.back")).toBeNull();
   });
 
-  test("une petite plume animée se tient juste à droite du nom Kleio, dans le même groupe centré", () => {
+  test("la phrase d'accueil est la première ligne de l'écran, juste sous l'en-tête permanent", () => {
     renderCalendar(root, baseState, handlers());
-    const brand = root.querySelector(".nav .brand");
-    const plume = brand.querySelector("svg.plume");
-    expect(plume).not.toBeNull();
-    expect(plume.getAttribute("aria-hidden")).toBe("true");
-    expect(plume.querySelectorAll("path")).toHaveLength(4);
-    expect(plume.querySelector("g.plume__feather")).not.toBeNull();
-    expect(brand.textContent).toBe("Kleio");
-    expect(plume.previousSibling.textContent).toBe("Kleio");
-    expect(plume.nextSibling).toBeNull();
-  });
-
-  test("une phrase d'accueil, sous le nom Kleio, dit ce que fait l'app et s'adresse à la personne", () => {
-    renderCalendar(root, baseState, handlers());
-    const brand = root.querySelector(".brand");
     const tagline = root.querySelector(".tagline");
     expect(tagline.textContent).toBe("Chaque matin, un fait d'histoire.");
-    expect(brand.parentElement.nextElementSibling).toBe(tagline);
+    expect(root.firstElementChild).toBe(tagline);
     expect(tagline.textContent).not.toMatch(/[·—]/);
-  });
-
-  test("le réglage est une icône en haut à droite, sur la ligne du nom Kleio", () => {
-    renderCalendar(root, baseState, handlers());
-    const nav = root.querySelector(".nav");
-    const settings = nav.querySelector("a.settings-link");
-    expect(settings).not.toBeNull();
-    expect(settings.getAttribute("href")).toBe("#/setup");
-    expect(settings.getAttribute("aria-label")).toBe("Réglages");
-    expect(settings.querySelector("svg")).not.toBeNull();
-    expect(nav.querySelector(".brand").textContent).toBe("Kleio");
   });
 
   test("il n'y a plus de lien « Réglages » en bas de page", () => {

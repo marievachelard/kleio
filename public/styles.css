@@ -116,7 +116,8 @@ h1.large { text-wrap: balance; }
 .go { appearance: none; border: 0; flex: none; width: 24px; height: 24px; border-radius: 7px; background: var(--key); color: var(--on-key); display: grid; place-items: center; margin-top: -3px; cursor: pointer; padding: 0; }
 
 /* Sur grand écran, le contenu garde une largeur de téléphone. */
-#app { max-width: 520px; margin: 0 auto; }
+#shell { max-width: 520px; margin: 0 auto; }
+.settings-link[hidden] { display: none; }
 
 /* Réglages */
 .steps { margin: 4px 0 0; padding-left: 20px; font-size: 15px; }

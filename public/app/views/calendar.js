@@ -123,7 +123,7 @@ export function renderCalendar(root, state, handlers) {
   }
 
   root.replaceChildren(
-    ...header({ tagline: "Chaque matin, un fait d'histoire.", settings: true }).filter(Boolean),
+    ...header({ tagline: "Chaque matin, un fait d'histoire." }).filter(Boolean),
     h(
       "main",
       { class: "pad" },

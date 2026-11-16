@@ -89,16 +89,15 @@ describe("renderDetail", () => {
 
   test("l'en-tête affiche Kleio et un retour vers le calendrier", () => {
     renderDetail(root, view());
-    expect(root.querySelector(".brand").textContent).toBe("Kleio");
     const back = root.querySelector("a.back");
     expect(back.textContent).toBe("‹ Calendrier");
     expect(back.getAttribute("href")).toBe("#/calendar");
   });
 
-  test("la plume animée accompagne aussi le nom Kleio sur le détail", () => {
+  test("le détail ne recrée pas l'en-tête : le nom et la plume vivent dans l'en-tête permanent", () => {
     renderDetail(root, view());
-    expect(root.querySelector(".brand svg.plume")).not.toBeNull();
-    expect(root.querySelector(".brand").textContent).toBe("Kleio");
+    expect(root.querySelector(".brand")).toBeNull();
+    expect(root.querySelector(".plume")).toBeNull();
   });
 
   test("l'icône de réglages n'apparaît pas sur le détail", () => {
