@@ -20,7 +20,7 @@ Marie veut commencer sa journée par une « nouvelle du monde historique » : ap
 
 ## Non-objectifs
 
-- Pas d'application native, pas de compte, pas de multi-utilisateurs.
+- Pas d'application native, pas de compte ni de mot de passe.
 - Pas de quiz, de score, de série de jours consécutifs, de partage social.
 - Pas de contenu généré à la volée : les faits sont écrits à l'avance.
 
@@ -115,3 +115,14 @@ Marie installe Kleio sur son iPhone 16 en moins de cinq minutes, accepte les not
 - Dans la carte du jour sélectionné, le bouton qui ouvre le détail est le même que le bouton « Lire l'article » de l'écran de détail : un petit carré arrondi couleur clé avec une flèche ↗ foncée, aligné sur la ligne du titre de la carte.
 - **En-tête commun** aux écrans Détail et Calendrier : le nom « Kleio », centré, en texte couleur clé (sans logo), seul sur sa ligne. Sur le Détail, le bouton de retour « ‹ Calendrier » est sur la ligne du dessous, à gauche, au-dessus du titre.
 - **Étiquette « ★ Incontournable »** : dans le détail d'une date incontournable, elle s'ajoute aux étiquettes (France ou Monde, thème), en couleur clé pleine avec texte blanc. Les dates non incontournables n'ont pas cette étiquette.
+
+## Plusieurs téléphones, sans compte (changement du 2026-11-16)
+
+Marie veut que n'importe qui avec le lien puisse utiliser Kleio (pour l'instant environ trois proches). Conséquences :
+
+- **Pas de clé d'accès.** Consulter le calendrier et les faits ne demande rien. Pour recevoir la notification, chaque téléphone touche une fois « Activer les notifications » : c'est une inscription technique auprès du service de notification de l'appareil, sans compte ni identité.
+- **Plusieurs inscriptions** (une par téléphone). L'envoi de 08:30 part vers toutes. Chaque inscription garde son propre « dernier envoi », pour ne jamais envoyer deux fois le même jour même si l'envoi est relancé.
+- **Inscription refusée si l'adresse n'est pas celle d'un vrai service de notification** (Apple, Google, Mozilla, Microsoft), pour que personne ne puisse faire envoyer des requêtes ailleurs depuis le serveur.
+- **Limite de 25 inscriptions** (choix de Claude : l'offre gratuite de Cloudflare limite le temps de calcul d'un envoi planifié ; la valeur est à vérifier en conditions réelles). Au-delà, l'inscription est refusée avec un message clair.
+- Une inscription que le service de notification déclare disparue (404 ou 410) est supprimée ; le téléphone concerné propose alors de se réinscrire.
+- Le bouton de test et l'écran de statut ne concernent que le téléphone qui les utilise.

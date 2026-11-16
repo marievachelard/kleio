@@ -21,7 +21,7 @@ Il permet à GitHub de mettre en ligne chaque nouveau fait.
 
 - Un espace de stockage KV nommé `KLEIO_KV` (`npx wrangler kv namespace create KLEIO_KV`) dont l'identifiant va dans `wrangler.jsonc`.
 - Des clés pour les notifications (`npm run vapid`). La clé publique va dans `wrangler.jsonc`. La clé privée n'est jamais écrite dans un fichier : elle est enregistrée avec `npx wrangler secret put VAPID_PRIVATE_KEY`.
-- Une clé d'accès (`npx wrangler secret put KLEIO_KEY`). Claude te la donne dans la conversation. Tu la saisis une fois dans Kleio, sur ton iPhone.
+- Aucune clé d'accès : n'importe qui avec le lien peut activer les notifications sur son téléphone (limite de 25 téléphones).
 
 ## 4. Premier déploiement
 
