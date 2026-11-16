@@ -71,11 +71,10 @@ describe("renderSetup", () => {
     expect(buttons()).toContain("Activer les notifications");
   });
 
-  test("le retour vers le calendrier est présent", () => {
+  test("le retour vers le calendrier est dans l'en-tête permanent, pas dans l'écran", () => {
     renderSetup(root, state(), handlers());
-    expect(root.querySelector("a.back").getAttribute("href")).toBe("#/calendar");
+    expect(root.querySelector("a.back")).toBeNull();
   });
-
   test("affiche un message de résultat quand il est fourni", () => {
     renderSetup(root, state({ message: "Notifications activées." }), handlers());
     expect(root.querySelector(".msg").textContent).toBe("Notifications activées.");

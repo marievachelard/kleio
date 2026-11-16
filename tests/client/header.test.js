@@ -40,6 +40,28 @@ describe("mountHeader", () => {
     expect(settings.hidden).toBe(true);
   });
 
+  test("la flèche de retour est seule, à gauche : masquée par défaut, sans le mot « Calendrier », et s'affiche sur demande", () => {
+    const header = mountHeader(headerBox);
+    const back = headerBox.querySelector("a.back-link");
+    expect(back.getAttribute("href")).toBe("#/calendar");
+    expect(back.getAttribute("aria-label")).toBe("Retour au calendrier");
+    expect(back.querySelector("svg")).not.toBeNull();
+    expect(back.textContent.trim()).toBe("");
+    expect(back.hidden).toBe(true);
+    header.showBack(true);
+    expect(back.hidden).toBe(false);
+    header.showBack(false);
+    expect(back.hidden).toBe(true);
+  });
+
+  test("la flèche de retour, le nom et les réglages sont sur la même ligne (le même bloc .nav)", () => {
+    mountHeader(headerBox);
+    const nav = headerBox.querySelector(".nav");
+    expect(nav.querySelector("a.back-link")).not.toBeNull();
+    expect(nav.querySelector(".brand")).not.toBeNull();
+    expect(nav.querySelector("a.settings-link")).not.toBeNull();
+  });
+
   test("changer d'écran ne recrée pas l'en-tête : la plume reste le même élément, son mouvement ne repart pas de zéro", () => {
     mountHeader(headerBox);
     const plume = headerBox.querySelector(".plume");

@@ -1,4 +1,4 @@
-import { h } from "../dom.js";
+import { h, svg } from "../dom.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const GEAR_PATH =
@@ -51,24 +51,30 @@ function gearIcon() {
 }
 
 /**
- * En-tête permanent : « Kleio » centré, suivi de la plume animée, et l'icône de réglages à droite.
- * Il est créé UNE SEULE FOIS au démarrage, hors de la zone que les écrans remplacent : la plume garde donc
- * son mouvement quand on change de page. Seule l'icône de réglages est affichée ou masquée selon l'écran.
+ * En-tête permanent : flèche de retour seule à gauche, « Kleio » et la plume au centre, icône de réglages à droite,
+ * tous sur la même ligne. Il est créé UNE SEULE FOIS au démarrage, hors de la zone que les écrans remplacent :
+ * la plume garde donc son mouvement quand on change de page. Seules la flèche et l'icône de réglages sont
+ * affichées ou masquées selon l'écran (flèche sur les écrans de détail et de réglages, engrenage sur le calendrier).
  */
 export function mountHeader(container) {
+  const back = h(
+    "a",
+    { class: "back-link", href: "#/calendar", "aria-label": "Retour au calendrier", hidden: true },
+    svg("0 0 10 16", [10, 16], "M8 2L2 8l6 6", 2.2),
+  );
   const settings = h("a", { class: "settings-link", href: "#/setup", "aria-label": "Réglages", hidden: true }, gearIcon());
-  container.replaceChildren(h("div", { class: "nav" }, h("span", { class: "brand" }, "Kleio", plumeIcon()), settings));
+  container.replaceChildren(h("div", { class: "nav" }, back, h("span", { class: "brand" }, "Kleio", plumeIcon()), settings));
   return {
+    showBack(visible) {
+      back.hidden = !visible;
+    },
     showSettings(visible) {
       settings.hidden = !visible;
     },
   };
 }
 
-/** Éléments propres à un écran, juste sous l'en-tête permanent : phrase d'accueil et retour vers le calendrier. */
-export function header({ back = false, tagline = null } = {}) {
-  return [
-    tagline ? h("p", { class: "tagline" }, tagline) : null,
-    back ? h("a", { class: "back", href: "#/calendar" }, "‹ Calendrier") : null,
-  ];
+/** Éléments propres à un écran, juste sous l'en-tête permanent : la phrase d'accueil du calendrier. */
+export function header({ tagline = null } = {}) {
+  return [tagline ? h("p", { class: "tagline" }, tagline) : null];
 }

@@ -25,7 +25,7 @@ function lastDayOfMonth(days, monthIso) {
 
 function renderOffline() {
   root.replaceChildren(
-    ...header({ back: true }).filter(Boolean),
+    ...header().filter(Boolean),
     h("main", { class: "pad" }, h("p", { class: "empty" }, "Pas de connexion pour le moment. Réessaie dans un instant.")),
   );
 }
@@ -90,6 +90,7 @@ async function showSetup(message = "") {
 async function route() {
   const target = parseRoute(location.hash);
   pageHeader.showSettings(target.name === "calendar");
+  pageHeader.showBack(target.name !== "calendar");
   try {
     if (target.name === "day") await showDay(target.date);
     else if (target.name === "setup") await showSetup();

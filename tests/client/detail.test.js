@@ -87,13 +87,11 @@ describe("renderDetail", () => {
     expect(link.textContent).toContain("1945");
   });
 
-  test("l'en-tête affiche Kleio et un retour vers le calendrier", () => {
+  test("le retour vers le calendrier n'est plus un mot dans l'écran : la flèche vit dans l'en-tête permanent", () => {
     renderDetail(root, view());
-    const back = root.querySelector("a.back");
-    expect(back.textContent).toBe("‹ Calendrier");
-    expect(back.getAttribute("href")).toBe("#/calendar");
+    expect(root.querySelector("a.back")).toBeNull();
+    expect(root.textContent).not.toContain("‹ Calendrier");
   });
-
   test("le détail ne recrée pas l'en-tête : le nom et la plume vivent dans l'en-tête permanent", () => {
     renderDetail(root, view());
     expect(root.querySelector(".brand")).toBeNull();
@@ -114,9 +112,9 @@ describe("renderDetail", () => {
 });
 
 describe("renderUnavailable", () => {
-  test("explique que le jour n'est pas disponible et propose le retour", () => {
+  test("explique que le jour n'est pas disponible, sans recréer de lien de retour (il est dans l'en-tête)", () => {
     renderUnavailable(root);
     expect(root.textContent).toContain("Ce jour n'est pas encore disponible.");
-    expect(root.querySelector("a.back").getAttribute("href")).toBe("#/calendar");
+    expect(root.querySelector("a.back")).toBeNull();
   });
 });

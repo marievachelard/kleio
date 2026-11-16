@@ -43,7 +43,7 @@ body {
 
 /* ---------- Composants ---------- */
 .nav { display: flex; justify-content: center; align-items: center; padding: 14px 0 4px; position: relative; }
-.settings-link { position: absolute; right: -6px; top: 50%; transform: translateY(-40%); width: 36px; height: 36px; display: grid; place-items: center; color: var(--mut); border-radius: 50%; }
+.settings-link { position: absolute; right: -8px; top: 50%; transform: translateY(-40%); width: 36px; height: 36px; display: grid; place-items: center; color: var(--mut); border-radius: 50%; }
 .brand { display: inline-flex; align-items: baseline; gap: 4px; color: var(--key-text); font-weight: 600; font-size: 17px; }
 
 /* Plume « Respiration » à droite du nom : même couleur que le texte, mouvement lent et visible. */
@@ -57,7 +57,8 @@ body {
 }
 @media (prefers-reduced-motion: reduce) { .plume__feather { animation: none; } }
 .tagline { margin: 2px 0 30px; text-align: center; font-size: 14px; color: var(--mut); text-wrap: balance; }
-.back { display: inline-block; padding: 8px 0 0; font-size: 15px; color: var(--key-text); text-decoration: none; }
+.back-link { position: absolute; left: -15px; top: 50%; transform: translateY(-40%); width: 40px; height: 36px; display: grid; place-items: center; color: var(--key-text); border-radius: 50%; }
+.back-link[hidden] { display: none; }
 .pad { padding: 0; }
 .large { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0 2px; line-height: 1.15; }
 h1.large { text-wrap: balance; }

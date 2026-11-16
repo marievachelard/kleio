@@ -39,7 +39,7 @@ export function renderSetup(root, state, handlers) {
     : null;
 
   root.replaceChildren(
-    ...header({ back: true }).filter(Boolean),
+    ...header().filter(Boolean),
     h(
       "main",
       { class: "pad" },

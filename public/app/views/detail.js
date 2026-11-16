@@ -57,12 +57,12 @@ export function renderDetail(root, view) {
     ),
   );
 
-  root.replaceChildren(...header({ back: true }).filter(Boolean), main);
+  root.replaceChildren(...header().filter(Boolean), main);
 }
 
 export function renderUnavailable(root) {
   root.replaceChildren(
-    ...header({ back: true }).filter(Boolean),
+    ...header().filter(Boolean),
     h("main", { class: "pad" }, h("p", { class: "empty" }, "Ce jour n'est pas encore disponible.")),
   );
 }
