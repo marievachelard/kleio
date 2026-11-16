@@ -141,3 +141,15 @@ describe("routes inconnues", () => {
     expect((await handleApi(get("/api/nimporte"), env, now, data)).status).toBe(404);
   });
 });
+
+describe("GET /api/config", () => {
+  test("expose la clé publique VAPID sans authentification, jamais la clé privée", async () => {
+    const env = await makeEnv();
+    const res = await handleApi(get("/api/config"), env, now, data);
+    expect(res.status).toBe(200);
+    const text = await res.text();
+    expect(JSON.parse(text)).toEqual({ vapidPublicKey: env.VAPID_PUBLIC_KEY });
+    expect(text).not.toContain(env.VAPID_PRIVATE_KEY);
+    expect(text).not.toContain(env.KLEIO_KEY);
+  });
+});

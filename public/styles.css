@@ -101,3 +101,13 @@ h1.large { text-wrap: balance; }
 
 /* Sur grand écran, le contenu garde une largeur de téléphone. */
 #app { max-width: 520px; margin: 0 auto; }
+
+/* Réglages */
+.steps { margin: 4px 0 0; padding-left: 20px; font-size: 15px; }
+.steps li + li { margin-top: 4px; }
+.group input[type="password"] { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; margin: 8px 0; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+.btn { appearance: none; border: 0; font: inherit; font-weight: 600; font-size: 15px; width: 100%; padding: 11px 14px; border-radius: 12px; margin-top: 8px; background: var(--key-soft); color: var(--key-text); cursor: pointer; }
+.btn.primary { background: var(--key); color: var(--on-key); }
+.alert { background: var(--key); color: var(--on-key); border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-weight: 600; font-size: 15px; }
+.msg { margin: 10px 2px 0; color: var(--mut); font-size: 14px; }
+.settings { display: block; text-align: center; margin: 22px 0 24px; font-size: 13px; color: var(--mut); text-decoration: none; }

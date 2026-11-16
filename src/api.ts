@@ -46,6 +46,10 @@ export async function handleApi(
   const path = url.pathname;
   const today = parisDate(now);
 
+  if (req.method === "GET" && path === "/api/config") {
+    return json({ vapidPublicKey: env.VAPID_PUBLIC_KEY });
+  }
+
   if (req.method === "GET" && path === "/api/days") {
     return json({ today, launchDate: data.launchDate, days: listDays(today, data) });
   }

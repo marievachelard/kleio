@@ -4,6 +4,8 @@ import { addMonth } from "./format.js";
 import { renderCalendar } from "./views/calendar.js";
 import { header } from "./views/chrome.js";
 import { renderDetail, renderUnavailable } from "./views/detail.js";
+import { enablePush, fetchStatus, getStoredKey, isStandalone, sendTest, storeKey } from "./push.js";
+import { renderSetup } from "./views/setup.js";
 
 const root = document.getElementById("app");
 
@@ -56,6 +58,36 @@ async function showDay(date) {
   else renderUnavailable(root);
 }
 
+const ENABLE_MESSAGES = {
+  "not-standalone": "Ouvre Kleio depuis l'icône de l'écran d'accueil pour activer les notifications.",
+  denied: "Les notifications sont refusées. Autorise-les dans Réglages, Notifications, Kleio.",
+  error: "Impossible d'activer les notifications. Vérifie la clé d'accès et réessaie.",
+};
+
+async function showSetup(message = "") {
+  const key = getStoredKey();
+  const status = key ? await fetchStatus(key) : null;
+  renderSetup(
+    root,
+    { standalone: isStandalone(), status, hasKey: key !== "", message },
+    {
+      onSaveKey(value) {
+        if (value.trim() === "") return;
+        storeKey(value.trim());
+        showSetup("Clé enregistrée.");
+      },
+      async onEnable() {
+        const result = await enablePush(getStoredKey());
+        showSetup(result.ok ? "Notifications activées." : ENABLE_MESSAGES[result.reason]);
+      },
+      async onTest() {
+        const ok = await sendTest(getStoredKey());
+        showSetup(ok ? "Notification de test envoyée." : "L'envoi de test a échoué. Réinscris-toi puis réessaie.");
+      },
+    },
+  );
+}
+
 async function showHome() {
   const { today, days } = await fetchDays();
   if (days.some((d) => d.date === today)) {
@@ -71,6 +103,7 @@ async function route() {
     const dayMatch = /^#\/day\/(\d{4}-\d{2}-\d{2})$/.exec(hash);
     if (dayMatch) await showDay(dayMatch[1]);
     else if (hash === "#/calendar") await showCalendar();
+    else if (hash === "#/setup") await showSetup();
     else await showHome();
   } catch {
     renderOffline();

@@ -117,6 +117,7 @@ export function renderCalendar(root, state, handlers) {
       ),
       grid,
       card,
+      h("a", { class: "settings", href: "#/setup" }, "Réglages"),
     ),
   );
 }
