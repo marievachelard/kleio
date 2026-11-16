@@ -44,14 +44,27 @@ function* eachDate(from: string, to: string): Generator<string> {
   }
 }
 
-export function listDays(
-  today: string,
-  data: ContentData,
-): { date: string; title: string; pinned: boolean }[] {
-  const out: { date: string; title: string; pinned: boolean }[] = [];
+export interface DayListItem {
+  date: string;
+  title: string;
+  pinned: boolean;
+  eventYear: number;
+  short: string;
+}
+
+export function listDays(today: string, data: ContentData): DayListItem[] {
+  const out: DayListItem[] = [];
   for (const date of eachDate(data.launchDate, today)) {
     const view = resolveDay(date, today, data);
-    if (view) out.push({ date, title: view.fact.title, pinned: view.pinned });
+    if (view) {
+      out.push({
+        date,
+        title: view.fact.title,
+        pinned: view.pinned,
+        eventYear: view.fact.eventYear,
+        short: view.fact.short,
+      });
+    }
   }
   return out;
 }

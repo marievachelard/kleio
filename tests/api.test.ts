@@ -69,7 +69,7 @@ describe("GET /api/days", () => {
     const body: any = await res.json();
     expect(body.today).toBe("2026-11-17");
     expect(body.launchDate).toBe("2026-11-17");
-    expect(body.days).toEqual([{ date: "2026-11-17", title: "Jour un", pinned: false }]);
+    expect(body.days).toEqual([{ date: "2026-11-17", title: "Jour un", pinned: false, eventYear: 1945, short: "Jour un court" }]);
     expect(JSON.stringify(body)).not.toContain("SECRET");
   });
 });

@@ -81,8 +81,8 @@ describe("listDays", () => {
       },
     });
     expect(listDays("2026-11-19", d)).toEqual([
-      { date: "2026-11-17", title: "A", pinned: false },
-      { date: "2026-11-19", title: "C", pinned: false },
+      { date: "2026-11-17", title: "A", pinned: false, eventYear: 1945, short: "A : texte court." },
+      { date: "2026-11-19", title: "C", pinned: false, eventYear: 1945, short: "C : texte court." },
     ]);
   });
 
@@ -91,7 +91,7 @@ describe("listDays", () => {
       launchDate: "2026-11-10",
       pinned: { "11-11": pinnedFact("Armistice", 1918) },
     });
-    expect(listDays("2026-11-12", d)).toEqual([{ date: "2026-11-11", title: "Armistice", pinned: true }]);
+    expect(listDays("2026-11-12", d)).toEqual([{ date: "2026-11-11", title: "Armistice", pinned: true, eventYear: 1918, short: "Armistice : texte court." }]);
   });
 });
 
