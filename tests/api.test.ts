@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { handleApi } from "../src/api";
 import type { ContentData } from "../src/merge";
 import type { Fact } from "../src/types";
+import { MAX_SUBSCRIPTIONS } from "../src/store";
 import { makeEnv, makeSubscription } from "./helpers";
 
 function fact(date: string, title: string): Fact {
@@ -29,7 +30,6 @@ const data: ContentData = {
   },
 };
 const now = new Date("2026-11-17T10:00:00Z");
-const KEY = { "X-Kleio-Key": "cle-de-test" };
 
 const get = (path: string, headers: Record<string, string> = {}) =>
   new Request(`https://kleio.test${path}`, { headers });
@@ -74,71 +74,101 @@ describe("GET /api/days", () => {
   });
 });
 
-describe("inscription et statut", () => {
-  test("subscribe sans clé renvoie 401", async () => {
+describe("POST /api/subscribe", () => {
+  test("accepte une inscription sans aucune clé", async () => {
     const env = await makeEnv();
     const sub = await makeSubscription();
-    expect((await handleApi(post("/api/subscribe", sub), env, now, data)).status).toBe(401);
+    expect((await handleApi(post("/api/subscribe", sub), env, now, data)).status).toBe(204);
+    const status: any = await (await handleApi(post("/api/status", { endpoint: sub.endpoint }), env, now, data)).json();
+    expect(status.subscribed).toBe(true);
   });
 
-  test("subscribe avec clé renvoie 204 et le statut indique l'inscription", async () => {
+  test("refuse un corps invalide", async () => {
     const env = await makeEnv();
-    const sub = await makeSubscription();
-    expect((await handleApi(post("/api/subscribe", sub, KEY), env, now, data)).status).toBe(204);
-    const status: any = await (await handleApi(get("/api/status", KEY), env, now, data)).json();
-    expect(status).toEqual({
-      subscribed: true,
-      subscriptionValid: true,
-      lastSentDate: null,
-      lastSendOk: null,
-      todayReady: true,
-    });
-  });
-
-  test("subscribe refuse un corps invalide", async () => {
-    const env = await makeEnv();
-    const res = await handleApi(post("/api/subscribe", { endpoint: "http://x" }, KEY), env, now, data);
+    const res = await handleApi(post("/api/subscribe", { endpoint: "http://x" }), env, now, data);
     expect(res.status).toBe(400);
   });
 
-  test("status exige la clé", async () => {
+  test("refuse une adresse qui n'est pas celle d'un service de notification", async () => {
     const env = await makeEnv();
-    expect((await handleApi(get("/api/status"), env, now, data)).status).toBe(401);
+    const sub = await makeSubscription("https://exemple.org/push");
+    const res = await handleApi(post("/api/subscribe", sub), env, now, data);
+    expect(res.status).toBe(400);
+  });
+
+  test("refuse proprement quand la limite de téléphones est atteinte", async () => {
+    const env = await makeEnv();
+    for (let i = 0; i < MAX_SUBSCRIPTIONS; i++) {
+      const sub = await makeSubscription(`https://web.push.apple.com/t-${i}`);
+      expect((await handleApi(post("/api/subscribe", sub), env, now, data)).status).toBe(204);
+    }
+    const extra = await makeSubscription("https://web.push.apple.com/un-de-trop");
+    const res = await handleApi(post("/api/subscribe", extra), env, now, data);
+    expect(res.status).toBe(503);
+    expect(await res.json()).toEqual({ error: "full" });
+  });
+});
+
+describe("POST /api/status", () => {
+  test("décrit l'inscription du téléphone qui demande", async () => {
+    const env = await makeEnv();
+    const sub = await makeSubscription();
+    await handleApi(post("/api/subscribe", sub), env, now, data);
+    const res = await handleApi(post("/api/status", { endpoint: sub.endpoint }), env, now, data);
+    expect(await res.json()).toEqual({ subscribed: true, lastSentDate: null, lastSendOk: null, todayReady: true });
+  });
+
+  test("un téléphone inconnu n'est pas inscrit", async () => {
+    const env = await makeEnv();
+    const res = await handleApi(post("/api/status", { endpoint: "https://web.push.apple.com/inconnu" }), env, now, data);
+    expect(await res.json()).toEqual({ subscribed: false, lastSentDate: null, lastSendOk: null, todayReady: true });
+  });
+
+  test("sans adresse, répond comme un téléphone non inscrit", async () => {
+    const env = await makeEnv();
+    const res = await handleApi(post("/api/status", {}), env, now, data);
+    expect((await res.json() as any).subscribed).toBe(false);
   });
 });
 
 describe("POST /api/test", () => {
-  test("sans inscription renvoie 409", async () => {
+  test("pour un téléphone non inscrit renvoie 404 sans rien envoyer", async () => {
     const env = await makeEnv();
-    const res = await handleApi(post("/api/test", {}, KEY), env, now, data);
-    expect(res.status).toBe(409);
+    const calls: string[] = [];
+    const fetchFn = async (u: string) => {
+      calls.push(u);
+      return new Response(null, { status: 201 });
+    };
+    const res = await handleApi(post("/api/test", { endpoint: "https://web.push.apple.com/inconnu" }), env, now, data, fetchFn);
+    expect(res.status).toBe(404);
+    expect(calls).toHaveLength(0);
   });
 
-  test("un 410 du service push invalide l'inscription", async () => {
+  test("un 410 du service push supprime l'inscription", async () => {
     const env = await makeEnv();
     const sub = await makeSubscription();
-    await handleApi(post("/api/subscribe", sub, KEY), env, now, data);
+    await handleApi(post("/api/subscribe", sub), env, now, data);
     const gone = async () => new Response(null, { status: 410 });
-    const res = await handleApi(post("/api/test", {}, KEY), env, now, data, gone);
+    const res = await handleApi(post("/api/test", { endpoint: sub.endpoint }), env, now, data, gone);
     expect(await res.json()).toEqual({ ok: false });
-    const status: any = await (await handleApi(get("/api/status", KEY), env, now, data)).json();
-    expect(status.subscriptionValid).toBe(false);
+    const status: any = await (await handleApi(post("/api/status", { endpoint: sub.endpoint }), env, now, data)).json();
+    expect(status.subscribed).toBe(false);
   });
 
-  test("un envoi réussi renvoie ok", async () => {
+  test("un envoi réussi renvoie ok et n'écrit qu'à ce téléphone", async () => {
     const env = await makeEnv();
-    const sub = await makeSubscription();
-    await handleApi(post("/api/subscribe", sub, KEY), env, now, data);
-    const created = async () => new Response(null, { status: 201 });
-    const res = await handleApi(post("/api/test", {}, KEY), env, now, data, created);
+    const mine = await makeSubscription("https://web.push.apple.com/moi");
+    const other = await makeSubscription("https://web.push.apple.com/autre");
+    await handleApi(post("/api/subscribe", mine), env, now, data);
+    await handleApi(post("/api/subscribe", other), env, now, data);
+    const urls: string[] = [];
+    const created = async (u: string) => {
+      urls.push(u);
+      return new Response(null, { status: 201 });
+    };
+    const res = await handleApi(post("/api/test", { endpoint: mine.endpoint }), env, now, data, created);
     expect(await res.json()).toEqual({ ok: true });
-  });
-});
-
-describe("routes inconnues", () => {
-  test("renvoie 404", async () => {
-    const env = await makeEnv();
-    expect((await handleApi(get("/api/nimporte"), env, now, data)).status).toBe(404);
+    expect(urls).toEqual([mine.endpoint]);
   });
 });
 
@@ -150,6 +180,5 @@ describe("GET /api/config", () => {
     const text = await res.text();
     expect(JSON.parse(text)).toEqual({ vapidPublicKey: env.VAPID_PUBLIC_KEY });
     expect(text).not.toContain(env.VAPID_PRIVATE_KEY);
-    expect(text).not.toContain(env.KLEIO_KEY);
   });
 });

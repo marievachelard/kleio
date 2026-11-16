@@ -4,7 +4,7 @@ import { addMonth } from "./format.js";
 import { renderCalendar } from "./views/calendar.js";
 import { header } from "./views/chrome.js";
 import { renderDetail, renderUnavailable } from "./views/detail.js";
-import { enablePush, fetchStatus, getStoredKey, isStandalone, sendTest, storeKey } from "./push.js";
+import { currentEndpoint, enablePush, fetchStatus, isEnabledBefore, isStandalone, sendTest } from "./push.js";
 import { renderSetup } from "./views/setup.js";
 
 const root = document.getElementById("app");
@@ -61,28 +61,24 @@ async function showDay(date) {
 const ENABLE_MESSAGES = {
   "not-standalone": "Ouvre Kleio depuis l'icône de l'écran d'accueil pour activer les notifications.",
   denied: "Les notifications sont refusées. Autorise-les dans Réglages, Notifications, Kleio.",
-  error: "Impossible d'activer les notifications. Vérifie la clé d'accès et réessaie.",
+  full: "Kleio a atteint son nombre maximal de téléphones. Réessaie plus tard.",
+  error: "Impossible d'activer les notifications. Réessaie dans un instant.",
 };
 
 async function showSetup(message = "") {
-  const key = getStoredKey();
-  const status = key ? await fetchStatus(key) : null;
+  const endpoint = await currentEndpoint();
+  const status = await fetchStatus(endpoint);
   renderSetup(
     root,
-    { standalone: isStandalone(), status, hasKey: key !== "", message },
+    { standalone: isStandalone(), status, enabledBefore: isEnabledBefore(), message },
     {
-      onSaveKey(value) {
-        if (value.trim() === "") return;
-        storeKey(value.trim());
-        showSetup("Clé enregistrée.");
-      },
       async onEnable() {
-        const result = await enablePush(getStoredKey());
+        const result = await enablePush();
         showSetup(result.ok ? "Notifications activées." : ENABLE_MESSAGES[result.reason]);
       },
       async onTest() {
-        const ok = await sendTest(getStoredKey());
-        showSetup(ok ? "Notification de test envoyée." : "L'envoi de test a échoué. Réinscris-toi puis réessaie.");
+        const ok = await sendTest(await currentEndpoint());
+        showSetup(ok ? "Notification de test envoyée." : "L'envoi de test a échoué. Réactive les notifications puis réessaie.");
       },
     },
   );

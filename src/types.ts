@@ -36,7 +36,6 @@ export interface DayView {
 
 export interface Env {
   KLEIO_KV: KVNamespace;
-  KLEIO_KEY: string;
   VAPID_PUBLIC_KEY: string;
   VAPID_PRIVATE_KEY: string;
   VAPID_SUBJECT: string;

@@ -3,48 +3,61 @@ import { parisDate, shouldSendNow } from "./dates";
 import type { ContentData } from "./merge";
 import { buildNotification } from "./notification";
 import { sendPush } from "./push";
-import { getSendState, getSubscription, recordSend, setSubscriptionValid } from "./store";
+import { deleteSubscription, listRecords, updateRecord } from "./store";
 import type { Env } from "./types";
 
-export type DailyOutcome =
-  | "sent"
-  | "skipped-time"
-  | "skipped-already-sent"
-  | "skipped-no-fact"
-  | "skipped-no-subscription"
-  | "failed"
-  | "subscription-gone";
+export type DailyOutcome = "skipped-time" | "skipped-no-fact" | "skipped-no-subscription" | "done";
+
+export interface DailyReport {
+  outcome: DailyOutcome;
+  sent: number;
+  failed: number;
+  gone: number;
+  alreadySent: number;
+}
 
 type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
-/** Envoi quotidien : une seule fois par jour de Paris, seulement dans la fenêtre de 08:30, jamais sans fait. */
+const EMPTY = { sent: 0, failed: 0, gone: 0, alreadySent: 0 };
+
+/**
+ * Envoi quotidien à tous les téléphones inscrits : une seule fois par téléphone et par jour de Paris,
+ * seulement dans la fenêtre de 08:30, jamais sans fait prêt. Un téléphone en échec n'empêche pas les autres.
+ */
 export async function runDaily(
   env: Env,
   now: Date,
   data: ContentData,
   fetchFn: FetchLike = fetch,
-): Promise<DailyOutcome> {
-  if (!shouldSendNow(now)) return "skipped-time";
+): Promise<DailyReport> {
+  if (!shouldSendNow(now)) return { outcome: "skipped-time", ...EMPTY };
 
   const today = parisDate(now);
-  const state = await getSendState(env);
-  if (state.lastSentDate === today) return "skipped-already-sent";
-
   const view = resolveDay(today, today, data);
-  if (!view) return "skipped-no-fact";
+  if (!view) return { outcome: "skipped-no-fact", ...EMPTY };
 
-  const sub = await getSubscription(env);
-  if (!sub || !state.subscriptionValid) return "skipped-no-subscription";
+  const records = await listRecords(env);
+  if (records.length === 0) return { outcome: "skipped-no-subscription", ...EMPTY };
 
-  const result = await sendPush(sub, buildNotification(view.fact, today), env, fetchFn);
-  if (result.ok) {
-    await recordSend(env, today, true);
-    return "sent";
+  const payload = buildNotification(view.fact, today);
+  const report: DailyReport = { outcome: "done", ...EMPTY };
+
+  for (const { id, record } of records) {
+    if (record.lastSentDate === today) {
+      report.alreadySent++;
+      continue;
+    }
+    const result = await sendPush(record.subscription, payload, env, fetchFn);
+    if (result.ok) {
+      await updateRecord(env, id, { lastSentDate: today, lastSendOk: true });
+      report.sent++;
+    } else if (result.gone) {
+      await deleteSubscription(env, record.subscription.endpoint!);
+      report.gone++;
+    } else {
+      await updateRecord(env, id, { lastSendOk: false });
+      report.failed++;
+    }
   }
-  await recordSend(env, today, false);
-  if (result.gone) {
-    await setSubscriptionValid(env, false);
-    return "subscription-gone";
-  }
-  return "failed";
+  return report;
 }

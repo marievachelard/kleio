@@ -24,13 +24,16 @@ export class MemoryKV {
   async delete(key: string) {
     this.store.delete(key);
   }
+  async list(opts: { prefix?: string } = {}) {
+    const keys = [...this.store.keys()].filter((k) => k.startsWith(opts.prefix ?? "")).map((name) => ({ name }));
+    return { keys, list_complete: true, cacheStatus: null };
+  }
 }
 
 export async function makeEnv(over: Partial<Env> = {}): Promise<Env & { KLEIO_KV: MemoryKV }> {
   const vapid = await generateVapidKeys();
   return {
     KLEIO_KV: new MemoryKV() as unknown as KVNamespace,
-    KLEIO_KEY: "cle-de-test",
     VAPID_PUBLIC_KEY: vapid.publicKey,
     VAPID_PRIVATE_KEY: vapid.privateKey,
     VAPID_SUBJECT: "https://github.com/marievachelard/kleio",

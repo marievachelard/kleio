@@ -3,12 +3,13 @@ import { formatDayTitle } from "../format.js";
 import { header } from "./chrome.js";
 
 /**
- * state : { standalone, status | null, hasKey, message? }
- * handlers : { onSaveKey(value), onEnable(), onTest() }
+ * state : { standalone, status | null, enabledBefore, message? }
+ * handlers : { onEnable(), onTest() }
  */
 export function renderSetup(root, state, handlers) {
-  const { standalone, status, hasKey, message } = state;
-  const needsResubscribe = status && status.subscribed && status.subscriptionValid === false;
+  const { standalone, status, enabledBefore, message } = state;
+  const subscribed = !!(status && status.subscribed);
+  const needsResubscribe = enabledBefore && status !== null && !status.subscribed;
 
   const install = !standalone
     ? h(
@@ -25,33 +26,25 @@ export function renderSetup(root, state, handlers) {
       )
     : null;
 
-  const keyField = h("input", { type: "password", id: "kleio-key", autocomplete: "off", "aria-label": "Clé d'accès", placeholder: hasKey ? "Clé enregistrée" : "Clé d'accès" });
-  const keyBlock = h(
-    "section",
-    { class: "group" },
-    h("h2", null, "Clé d'accès"),
-    h("p", null, "Elle te protège : sans elle, personne d'autre ne peut s'inscrire aux notifications."),
-    keyField,
-    h("button", { type: "button", class: "btn", onclick: () => handlers.onSaveKey(keyField.value) }, "Enregistrer la clé"),
-  );
-
-  const actions =
-    standalone && hasKey
-      ? h(
-          "section",
-          { class: "group" },
-          h("h2", null, "Notifications"),
-          h("button", { type: "button", class: "btn primary", onclick: () => handlers.onEnable() }, "Activer les notifications"),
-          h("button", { type: "button", class: "btn", onclick: () => handlers.onTest() }, "Envoyer une notification de test"),
-        )
-      : null;
+  const actions = standalone
+    ? h(
+        "section",
+        { class: "group" },
+        h("h2", null, "Notifications"),
+        h("p", null, "Une notification arrive chaque matin à 08:30. Aucun compte n'est nécessaire."),
+        h("button", { type: "button", class: "btn primary", onclick: () => handlers.onEnable() }, "Activer les notifications"),
+        subscribed
+          ? h("button", { type: "button", class: "btn", onclick: () => handlers.onTest() }, "Envoyer une notification de test")
+          : null,
+      )
+    : null;
 
   const statusBlock = status
     ? h(
         "section",
         { class: "group" },
         h("h2", null, "Statut"),
-        h("p", null, status.subscribed ? (status.subscriptionValid ? "Inscription valide" : "Inscription à refaire") : "Pas encore inscrit"),
+        h("p", null, status.subscribed ? "Ce téléphone est inscrit" : "Ce téléphone n'est pas inscrit"),
         h("p", null, status.lastSentDate ? `Dernier envoi : ${formatDayTitle(status.lastSentDate)}` : "Aucun envoi pour le moment"),
         h("p", null, status.todayReady ? "Fait du jour prêt" : "Aucun fait prêt pour aujourd'hui"),
       )
@@ -64,11 +57,10 @@ export function renderSetup(root, state, handlers) {
       { class: "pad" },
       h("h1", { class: "large" }, "Réglages"),
       needsResubscribe
-        ? h("div", { class: "alert", role: "alert" }, "Réinscris-toi : l'inscription aux notifications n'est plus valide. Touche « Activer les notifications ».")
+        ? h("div", { class: "alert", role: "alert" }, "Réinscris-toi : ce téléphone n'est plus inscrit aux notifications. Touche « Activer les notifications ».")
         : null,
       message ? h("p", { class: "msg", role: "status" }, message) : null,
       install,
-      keyBlock,
       actions,
       statusBlock,
     ),

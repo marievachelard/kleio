@@ -1,4 +1,4 @@
-const KEY_STORAGE = "kleio-key";
+const ENABLED_FLAG = "kleio-enabled";
 
 export function isStandalone() {
   return (
@@ -7,20 +7,20 @@ export function isStandalone() {
   );
 }
 
-/** La clé d'accès reste dans ce navigateur ; elle n'est envoyée que dans l'en-tête X-Kleio-Key. */
-export function getStoredKey() {
+/** Ce téléphone a-t-il déjà activé les notifications ? Sert à proposer de se réinscrire si le serveur l'a oublié. */
+export function isEnabledBefore() {
   try {
-    return localStorage.getItem(KEY_STORAGE) || "";
+    return localStorage.getItem(ENABLED_FLAG) === "true";
   } catch {
-    return "";
+    return false;
   }
 }
 
-export function storeKey(key) {
+function rememberEnabled() {
   try {
-    localStorage.setItem(KEY_STORAGE, key);
+    localStorage.setItem(ENABLED_FLAG, "true");
   } catch {
-    /* stockage indisponible : la clé devra être ressaisie */
+    /* stockage indisponible : seule l'alerte de réinscription est perdue */
   }
 }
 
@@ -30,8 +30,20 @@ function urlBase64ToUint8Array(base64) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
-/** Demande la permission, inscrit l'appareil aux notifications et envoie l'abonnement au serveur. */
-export async function enablePush(key) {
+/** Adresse de l'inscription de ce navigateur auprès du service de notification, ou null. */
+export async function currentEndpoint() {
+  try {
+    if (!("serviceWorker" in navigator)) return null;
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    return subscription ? subscription.endpoint : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Demande la permission, inscrit ce téléphone et envoie l'abonnement au serveur. Aucun compte ni clé. */
+export async function enablePush() {
   if (!isStandalone()) return { ok: false, reason: "not-standalone" };
   try {
     const permission = await Notification.requestPermission();
@@ -45,18 +57,30 @@ export async function enablePush(key) {
     });
     const res = await fetch("/api/subscribe", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-Kleio-Key": key },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(subscription.toJSON()),
     });
-    return res.status === 204 ? { ok: true } : { ok: false, reason: "error" };
+    if (res.status === 204) {
+      rememberEnabled();
+      return { ok: true };
+    }
+    return { ok: false, reason: res.status === 503 ? "full" : "error" };
   } catch {
     return { ok: false, reason: "error" };
   }
 }
 
-export async function sendTest(key) {
+async function postEndpoint(path, endpoint) {
+  return fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ endpoint }),
+  });
+}
+
+export async function sendTest(endpoint) {
   try {
-    const res = await fetch("/api/test", { method: "POST", headers: { "X-Kleio-Key": key } });
+    const res = await postEndpoint("/api/test", endpoint);
     if (!res.ok) return false;
     return (await res.json()).ok === true;
   } catch {
@@ -64,9 +88,9 @@ export async function sendTest(key) {
   }
 }
 
-export async function fetchStatus(key) {
+export async function fetchStatus(endpoint) {
   try {
-    const res = await fetch("/api/status", { headers: { "X-Kleio-Key": key } });
+    const res = await postEndpoint("/api/status", endpoint);
     return res.ok ? await res.json() : null;
   } catch {
     return null;

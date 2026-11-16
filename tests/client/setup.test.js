@@ -2,11 +2,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { renderSetup } from "../../public/app/views/setup.js";
 
-const okStatus = { subscribed: true, subscriptionValid: true, lastSentDate: "2026-11-16", lastSendOk: true, todayReady: true };
+const okStatus = { subscribed: true, lastSentDate: "2026-11-16", lastSendOk: true, todayReady: true };
 
 function handlers() {
-  return { onSaveKey: vi.fn(), onEnable: vi.fn(), onTest: vi.fn() };
+  return { onEnable: vi.fn(), onTest: vi.fn() };
 }
+const state = (over = {}) => ({ standalone: true, status: okStatus, enabledBefore: true, ...over });
 
 let root;
 beforeEach(() => {
@@ -15,65 +16,71 @@ beforeEach(() => {
 });
 
 const buttons = () => [...root.querySelectorAll("button")].map((b) => b.textContent);
+const click = (label) => [...root.querySelectorAll("button")].find((b) => b.textContent === label).click();
 
 describe("renderSetup", () => {
   test("hors de l'écran d'accueil : explique l'installation et masque l'activation", () => {
-    renderSetup(root, { standalone: false, status: null, hasKey: false }, handlers());
+    renderSetup(root, state({ standalone: false, status: null, enabledBefore: false }), handlers());
     expect(root.textContent).toContain("Sur l'écran d'accueil");
     expect(buttons()).not.toContain("Activer les notifications");
   });
 
-  test("sans clé enregistrée : propose de la saisir, pas d'activation", () => {
-    renderSetup(root, { standalone: true, status: null, hasKey: false }, handlers());
-    expect(root.querySelector("input[type=password]")).not.toBeNull();
-    expect(buttons()).toContain("Enregistrer la clé");
-    expect(buttons()).not.toContain("Activer les notifications");
+  test("n'affiche aucun champ de clé ni de mot de passe", () => {
+    renderSetup(root, state(), handlers());
+    expect(root.querySelector("input")).toBeNull();
+    expect(root.textContent).not.toMatch(/clé d'accès/i);
   });
 
-  test("enregistrer la clé transmet la valeur saisie", () => {
+  test("installée : activation toujours proposée, test seulement si le téléphone est inscrit", () => {
     const h = handlers();
-    renderSetup(root, { standalone: true, status: null, hasKey: false }, h);
-    root.querySelector("input[type=password]").value = "ma-cle";
-    [...root.querySelectorAll("button")].find((b) => b.textContent === "Enregistrer la clé").click();
-    expect(h.onSaveKey).toHaveBeenCalledWith("ma-cle");
-  });
-
-  test("installée avec une clé : activation et test disponibles", () => {
-    const h = handlers();
-    renderSetup(root, { standalone: true, status: okStatus, hasKey: true }, h);
+    renderSetup(root, state(), h);
     expect(buttons()).toContain("Activer les notifications");
     expect(buttons()).toContain("Envoyer une notification de test");
-    [...root.querySelectorAll("button")].find((b) => b.textContent === "Activer les notifications").click();
-    [...root.querySelectorAll("button")].find((b) => b.textContent === "Envoyer une notification de test").click();
+    click("Activer les notifications");
+    click("Envoyer une notification de test");
     expect(h.onEnable).toHaveBeenCalledTimes(1);
     expect(h.onTest).toHaveBeenCalledTimes(1);
+
+    renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: false }), handlers());
+    expect(buttons()).toContain("Activer les notifications");
+    expect(buttons()).not.toContain("Envoyer une notification de test");
   });
 
-  test("affiche le statut : inscription valide, dernier envoi, fait du jour prêt", () => {
-    renderSetup(root, { standalone: true, status: okStatus, hasKey: true }, handlers());
+  test("affiche le statut du téléphone : inscrit, dernier envoi, fait du jour prêt", () => {
+    renderSetup(root, state(), handlers());
     const text = root.textContent;
-    expect(text).toContain("Inscription valide");
-    expect(text).toContain("16 novembre");
+    expect(text).toContain("Ce téléphone est inscrit");
+    expect(text).toContain("Dernier envoi : 16 novembre");
     expect(text).toContain("Fait du jour prêt");
   });
 
-  test("inscription invalide : message « Réinscris-toi » bien visible", () => {
-    renderSetup(root, { standalone: true, status: { ...okStatus, subscriptionValid: false }, hasKey: true }, handlers());
+  test("téléphone qui avait activé puis disparu du serveur : message « Réinscris-toi »", () => {
+    renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: true }), handlers());
     expect(root.querySelector(".alert").textContent).toContain("Réinscris-toi");
   });
 
+  test("téléphone qui n'a jamais activé : pas d'alerte", () => {
+    renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: false }), handlers());
+    expect(root.querySelector(".alert")).toBeNull();
+  });
+
   test("aucun fait prêt pour aujourd'hui est signalé", () => {
-    renderSetup(root, { standalone: true, status: { ...okStatus, todayReady: false }, hasKey: true }, handlers());
+    renderSetup(root, state({ status: { ...okStatus, todayReady: false } }), handlers());
     expect(root.textContent).toContain("Aucun fait prêt pour aujourd'hui");
   });
 
+  test("sans statut (hors ligne), la page reste utilisable", () => {
+    renderSetup(root, state({ status: null }), handlers());
+    expect(buttons()).toContain("Activer les notifications");
+  });
+
   test("le retour vers le calendrier est présent", () => {
-    renderSetup(root, { standalone: true, status: null, hasKey: false }, handlers());
+    renderSetup(root, state(), handlers());
     expect(root.querySelector("a.back").getAttribute("href")).toBe("#/calendar");
   });
 
   test("affiche un message de résultat quand il est fourni", () => {
-    renderSetup(root, { standalone: true, status: null, hasKey: true, message: "Notifications activées." }, handlers());
+    renderSetup(root, state({ message: "Notifications activées." }), handlers());
     expect(root.querySelector(".msg").textContent).toBe("Notifications activées.");
   });
 });

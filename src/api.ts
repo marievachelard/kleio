@@ -2,7 +2,8 @@ import { listDays, resolveDay } from "./content";
 import type { ContentData } from "./merge";
 import { parisDate } from "./dates";
 import { sendPush } from "./push";
-import { getSendState, getSubscription, saveSubscription, setSubscriptionValid } from "./store";
+import { isAllowedPushEndpoint } from "./endpoints";
+import { deleteSubscription, getRecord, saveSubscription } from "./store";
 import type { Env, PushSubscriptionJSON } from "./types";
 
 type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
@@ -17,12 +18,6 @@ function json(body: unknown, status = 200): Response {
 }
 
 const notFound = () => json({ error: "not-found" }, 404);
-const unauthorized = () => json({ error: "unauthorized" }, 401);
-
-function isAuthorized(req: Request, env: Env): boolean {
-  const key = req.headers.get("X-Kleio-Key");
-  return key !== null && key === env.KLEIO_KEY && env.KLEIO_KEY !== "";
-}
 
 function isValidSubscription(x: unknown): x is PushSubscriptionJSON {
   const s = x as PushSubscriptionJSON | null;
@@ -31,8 +26,14 @@ function isValidSubscription(x: unknown): x is PushSubscriptionJSON {
     typeof s.endpoint === "string" &&
     s.endpoint.startsWith("https://") &&
     typeof s.keys?.auth === "string" &&
-    typeof s.keys?.p256dh === "string"
+    typeof s.keys?.p256dh === "string" &&
+    isAllowedPushEndpoint(s.endpoint)
   );
+}
+
+async function endpointFrom(req: Request): Promise<string | null> {
+  const body = (await req.json().catch(() => null)) as { endpoint?: unknown } | null;
+  return typeof body?.endpoint === "string" ? body.endpoint : null;
 }
 
 export async function handleApi(
@@ -61,35 +62,34 @@ export async function handleApi(
   }
 
   if (path === "/api/subscribe" && req.method === "POST") {
-    if (!isAuthorized(req, env)) return unauthorized();
     const body = await req.json().catch(() => null);
     if (!isValidSubscription(body)) return json({ error: "invalid-subscription" }, 400);
-    await saveSubscription(env, body);
+    const saved = await saveSubscription(env, body);
+    if (saved === "full") return json({ error: "full" }, 503);
     return new Response(null, { status: 204, headers: NO_STORE });
   }
 
   if (path === "/api/test" && req.method === "POST") {
-    if (!isAuthorized(req, env)) return unauthorized();
-    const sub = await getSubscription(env);
-    if (!sub) return json({ ok: false, error: "no-subscription" }, 409);
+    const endpoint = await endpointFrom(req);
+    const record = endpoint ? await getRecord(env, endpoint) : null;
+    if (!endpoint || !record) return notFound();
     const result = await sendPush(
-      sub,
-      { title: "Notification de test", body: "Kleio est bien activé sur cet iPhone.", url: "/#/setup" },
+      record.subscription,
+      { title: "Notification de test", body: "Kleio est bien activé sur ce téléphone.", url: "/#/setup" },
       env,
       fetchFn,
     );
-    if (!result.ok && result.gone) await setSubscriptionValid(env, false);
+    if (!result.ok && result.gone) await deleteSubscription(env, endpoint);
     return json({ ok: result.ok });
   }
 
-  if (path === "/api/status" && req.method === "GET") {
-    if (!isAuthorized(req, env)) return unauthorized();
-    const [sub, state] = await Promise.all([getSubscription(env), getSendState(env)]);
+  if (path === "/api/status" && req.method === "POST") {
+    const endpoint = await endpointFrom(req);
+    const record = endpoint ? await getRecord(env, endpoint) : null;
     return json({
-      subscribed: sub !== null,
-      subscriptionValid: state.subscriptionValid,
-      lastSentDate: state.lastSentDate,
-      lastSendOk: state.lastSendOk,
+      subscribed: record !== null,
+      lastSentDate: record?.lastSentDate ?? null,
+      lastSendOk: record?.lastSendOk ?? null,
       todayReady: resolveDay(today, today, data) !== null,
     });
   }
