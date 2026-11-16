@@ -10,7 +10,11 @@
     "validate": "tsx scripts/validate-data.ts",
     "check-links": "tsx scripts/check-links.ts",
     "icons": "tsx scripts/make-icons.ts",
-    "vapid": "tsx scripts/gen-vapid.ts"
+    "vapid": "tsx scripts/gen-vapid.ts",
+    "build:data": "tsx scripts/build-data.ts",
+    "pretest": "npm run build:data",
+    "predev": "npm run build:data",
+    "pretypecheck": "npm run build:data"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261116.1",
