@@ -31,7 +31,7 @@ describe("renderSetup", () => {
     expect(root.textContent).not.toMatch(/clé d'accès/i);
   });
 
-  test("installée : activation toujours proposée, test seulement si le téléphone est inscrit", () => {
+  test("installée : activation toujours proposée, test seulement si les notifications sont activées", () => {
     const h = handlers();
     renderSetup(root, state(), h);
     expect(buttons()).toContain("Activer les notifications");
@@ -46,17 +46,17 @@ describe("renderSetup", () => {
     expect(buttons()).not.toContain("Envoyer une notification de test");
   });
 
-  test("affiche le statut du téléphone : inscrit, dernier envoi, fait du jour prêt", () => {
+  test("affiche le statut du téléphone : notifications activées, dernier envoi, fait du jour prêt", () => {
     renderSetup(root, state(), handlers());
     const text = root.textContent;
-    expect(text).toContain("Ce téléphone est inscrit");
+    expect(text).toContain("Notifications activées sur ce téléphone");
     expect(text).toContain("Dernier envoi : 16 novembre");
     expect(text).toContain("Fait du jour prêt");
   });
 
-  test("téléphone qui avait activé puis disparu du serveur : message « Réinscris-toi »", () => {
+  test("téléphone qui avait activé puis disparu du serveur : message « Réactive les notifications »", () => {
     renderSetup(root, state({ status: { ...okStatus, subscribed: false }, enabledBefore: true }), handlers());
-    expect(root.querySelector(".alert").textContent).toContain("Réinscris-toi");
+    expect(root.querySelector(".alert").textContent).toContain("Réactive les notifications");
   });
 
   test("téléphone qui n'a jamais activé : pas d'alerte", () => {

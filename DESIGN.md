@@ -126,3 +126,5 @@ Marie veut que n'importe qui avec le lien puisse utiliser Kleio (pour l'instant 
 - **Limite de 25 inscriptions** (choix de Claude : l'offre gratuite de Cloudflare limite le temps de calcul d'un envoi planifié ; la valeur est à vérifier en conditions réelles). Au-delà, l'inscription est refusée avec un message clair.
 - Une inscription que le service de notification déclare disparue (404 ou 410) est supprimée ; le téléphone concerné propose alors de se réinscrire.
 - Le bouton de test et l'écran de statut ne concernent que le téléphone qui les utilise.
+
+Dans l'interface, on parle toujours d'« activer les notifications » : jamais d'« inscription », de compte ou de connexion, pour ne pas laisser croire qu'il faut un compte.

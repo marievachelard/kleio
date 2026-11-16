@@ -44,7 +44,7 @@ export function renderSetup(root, state, handlers) {
         "section",
         { class: "group" },
         h("h2", null, "Statut"),
-        h("p", null, status.subscribed ? "Ce téléphone est inscrit" : "Ce téléphone n'est pas inscrit"),
+        h("p", null, status.subscribed ? "Notifications activées sur ce téléphone" : "Notifications non activées sur ce téléphone"),
         h("p", null, status.lastSentDate ? `Dernier envoi : ${formatDayTitle(status.lastSentDate)}` : "Aucun envoi pour le moment"),
         h("p", null, status.todayReady ? "Fait du jour prêt" : "Aucun fait prêt pour aujourd'hui"),
       )
@@ -57,7 +57,7 @@ export function renderSetup(root, state, handlers) {
       { class: "pad" },
       h("h1", { class: "large" }, "Réglages"),
       needsResubscribe
-        ? h("div", { class: "alert", role: "alert" }, "Réinscris-toi : ce téléphone n'est plus inscrit aux notifications. Touche « Activer les notifications ».")
+        ? h("div", { class: "alert", role: "alert" }, "Réactive les notifications : elles ne sont plus actives sur ce téléphone. Touche « Activer les notifications ».")
         : null,
       message ? h("p", { class: "msg", role: "status" }, message) : null,
       install,
