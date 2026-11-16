@@ -117,18 +117,25 @@ describe("renderCalendar", () => {
     expect(card.querySelector("p").textContent).toBe("37 pays signent à Londres.");
   });
 
-  test("la flèche de la carte ouvre le détail", () => {
+  test("toute la carte ouvre le détail du jour sélectionné, pas seulement la flèche", () => {
     const h = handlers();
     renderCalendar(root, baseState, h);
-    root.querySelector(".pickcard button.go").click();
+    const card = root.querySelector(".pickcard");
+    expect(card.tagName).toBe("A");
+    expect(card.getAttribute("href")).toBe("#/day/2026-11-16");
+    card.querySelector("p").click();
     expect(h.onOpen).toHaveBeenCalledWith("2026-11-16");
+    card.querySelector("h4").click();
+    card.querySelector(".go").click();
+    expect(h.onOpen).toHaveBeenCalledTimes(3);
   });
 
-  test("toucher la carte elle-même n'ouvre rien", () => {
-    const h = handlers();
-    renderCalendar(root, baseState, h);
-    root.querySelector(".pickcard p").click();
-    expect(h.onOpen).not.toHaveBeenCalled();
+  test("la flèche de la carte n'est plus un bouton séparé : elle est décorative", () => {
+    renderCalendar(root, baseState, handlers());
+    const go = root.querySelector(".pickcard .go");
+    expect(go.tagName).not.toBe("BUTTON");
+    expect(go.getAttribute("aria-hidden")).toBe("true");
+    expect(root.querySelector(".pickcard button")).toBeNull();
   });
 
   test("lancement et aujourd'hui dans le même mois : les deux flèches de mois sont grisées", () => {

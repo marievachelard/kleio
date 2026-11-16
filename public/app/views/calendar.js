@@ -108,14 +108,17 @@ export function renderCalendar(root, state, handlers) {
   if (item && selected.slice(0, 7) === monthIso) {
     const [, m, d] = selected.split("-").map(Number);
     card = h(
-      "div",
-      { class: "group pickcard" },
+      "a",
+      {
+        class: "group pickcard",
+        href: `#/day/${selected}`,
+        onclick: (ev) => {
+          ev.preventDefault();
+          handlers.onOpen(selected);
+        },
+      },
       h("div", null, h("h4", null, formatEventDate(d, m, item.eventYear)), h("p", null, item.short)),
-      h(
-        "button",
-        { type: "button", class: "go", "aria-label": "Voir le détail", onclick: () => handlers.onOpen(selected) },
-        svg("0 0 12 12", [12, 12], "M2.5 9.5l7-7M3.5 2.5h6v6", 1.9),
-      ),
+      h("span", { class: "go", "aria-hidden": "true" }, svg("0 0 12 12", [12, 12], "M2.5 9.5l7-7M3.5 2.5h6v6", 1.9)),
     );
   }
 
