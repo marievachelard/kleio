@@ -29,6 +29,6 @@ Il permet à GitHub de mettre en ligne chaque nouveau fait.
 
 ## Sécurité
 
-- Le dépôt GitHub est privé.
+- Le dépôt GitHub est public (choix de Marie). Les faits écrits à l'avance y sont donc lisibles : seule l'application ne les reçoit jamais avant leur jour.
 - Aucun secret n'est écrit dans le dépôt.
 - Les faits des jours à venir ne sont jamais envoyés à l'application.

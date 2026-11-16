@@ -71,7 +71,7 @@ Marie veut commencer sa journée par une « nouvelle du monde historique » : ap
 - Un envoi planifié tous les jours à une heure fixe, en fuseau Europe/Paris, déclenche la notification du fait du jour.
 - Toucher la notification ouvre directement l'écran de détail de ce jour.
 - Le calendrier et les faits déjà reçus fonctionnent hors connexion une fois l'application ouverte une première fois.
-- Les faits des jours à venir ne sont pas livrés à l'application (ils ne doivent pas se trouver dans les fichiers qu'elle charge). Le dépôt GitHub est privé (choix de Claude) pour garder la surprise.
+- Les faits des jours à venir ne sont pas livrés à l'application (ils ne doivent pas se trouver dans les fichiers qu'elle charge). Le dépôt GitHub est public, choix de Marie : les faits écrits quelques jours à l'avance y sont visibles, ce qu'elle accepte (les utilisateurs sont des proches et le risque est jugé sans importance). Seule l'application ne doit jamais recevoir les faits à venir.
 
 ## Laissé au constructeur
 
